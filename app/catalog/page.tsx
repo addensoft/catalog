@@ -3,6 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+
+// categories
 const categories = [
   { title: "ממתקי ילדים" },
   { title: "ממתקים במשקל" },
@@ -13,12 +15,14 @@ const categories = [
   { title: "שתייה וליקריצים" },
 ];
 
+// filters
 const filters = [
   "ממתקי ילדים",
   "מסטיקים",
   "מסטיקים וג’ליבינס",
 ];
 
+// products
 const products = [
   {
     id: 1,
@@ -93,6 +97,16 @@ const products = [
   },
 ];
 
+// short options
+const sortOptions = [
+  "תאריך (מחדש לישן)",
+  "תאריך (מישן לחדש)",
+  "מחיר (מזול ליקר)",
+  "מחיר (מיקר לזול)",
+  "מותג",
+  "שם (א-ת)",
+];
+
 
 
 
@@ -103,10 +117,9 @@ export default function CatalogPage() {
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("בחירה");
 
-    // multiple selct dropdown filter
-    // const [selectedKosher, setSelectedKosher] = useState<string[]>([]);
-    // const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-    // const [selectedDiet, setSelectedDiet] = useState<string[]>([]);
+        // short option const
+    const [sortOpen, setSortOpen] = useState(false);
+    const [selectedSort, setSelectedSort] = useState("סדר לפי");
 
     // special filter of dropdown
     const [selectedCategory, setSelectedCategory] = useState("all");
@@ -116,6 +129,8 @@ export default function CatalogPage() {
     const [selectedKosher, setSelectedKosher] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
     const [selectedSpecial, setSelectedSpecial] = useState<string[]>([]);
+
+
 
     
 
@@ -137,15 +152,7 @@ export default function CatalogPage() {
         }
         };
 
-        // products filters
-    //   const filteredProducts =
-    //     selected === "בחירה"
-    //     ? products
-    //     : products.filter(
-    //         (product) => product.category === selected
-    //     );
-
-        // dropdown filters
+        // all filters filters
       const filteredProducts = products.filter((product) => {
 
         const categoryMatch =
@@ -182,18 +189,18 @@ export default function CatalogPage() {
 
         <section className="sticky top-0 z-50 bg-[#ffffff] px-[1px] pt-0 pb-[2px]">
             {/* TOP HEADER */}
-            <header className="bg-[#ffffff] max-w-[1400px] mx-auto px-6 pt-[32px] pb-0">
-                <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-6">
-
+            <header className="bg-[#ffffff] max-w-[1400px] mx-auto px-2 lg:px-6 pt-[12px] lg:pt-[32px] pb-0 bg-[url('/mobile-header-bg.svg')] bg-cover bg-top bg-no-repeat lg:bg-none">
+                <div className="mx-auto flex max-w-[1600px] lg:flex-row lg:items-center lg:justify-between lg:gap-6">
                 {/* RIGHT LOGO AREA */}
-                <div className="flex items-center gap-3">
+               <div className="flex w-full items-baseline lg:items-center justify-start lg:justify-between pb-0 lg:w-auto lg:pb-0">
                     <div className="text-right leading-none">
-                    <div className="relative z-1 mb-[-52px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
+                    <div className="relative z-1 lg:mb-[-52px] mb-[-24px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
                         <Image 
                         src="/right-icon.png"
                         alt="right-icon"
                         width={140}
                         height={200}
+                        className="h-auto w-[100px] lg:w-[140px]"
                         />
                     </div>
 
@@ -201,16 +208,17 @@ export default function CatalogPage() {
 
                     <div className="mb-[-5px]">
                         <Image
-                        src="/yearbrand.png"
-                        alt="right-icon"
-                        width={168.66}
-                        height={70.8}
-                        />
+                            src="/yearbrand.png"
+                            alt="right-icon"
+                            width={168}
+                            height={70}
+                            className="h-auto w-[120px] lg:w-[168px]"
+                            />
                     </div>
                 </div>
 
                 {/* SEARCH AREA */}
-                <div className="flex flex-1 items-center justify-center gap-5">
+                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:gap-5">
 
                     {/* FILTER */}
 
@@ -219,7 +227,7 @@ export default function CatalogPage() {
                     {/* BUTTON */}
                     <button
                         onClick={() => setOpen(!open)}
-                      className="group flex h-[55px] min-w-[144px] w-auto cursor-pointer items-center justify-between gap-3 rounded-full border border-[#D41A68] bg-white px-6 shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition-all duration-300 hover:bg-[#D41A68]"
+                      className="group flex h-[55px] min-w-0 lg:min-w-[144px] w-auto cursor-pointer items-center justify-between gap-3 rounded-full border border-[#D41A68] bg-white px-6 shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition-all duration-300 hover:bg-[#D41A68]"
                     >
 
                         {/* TEXT */}
@@ -248,7 +256,7 @@ export default function CatalogPage() {
 
                     {/* DROPDOWN */}
                    {open && (
-                        <div className="absolute right-0 top-[72px] z-50 w-[980px] rounded-[32px] bg-[#46BAB9] p-8 px-5 shadow-2xl backdrop-blur-sm">
+                        <div className="absolute right-0 top-[72px] z-50 w-full lg:w-[980px] rounded-[32px] bg-[#46BAB9] p-8 px-5 shadow-2xl backdrop-blur-sm">
 
                             {/* TOP FILTER BUTTONS */}
                             <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
@@ -383,7 +391,7 @@ export default function CatalogPage() {
                         )}
                     </div>
                     {/* SEARCH */}
-                    <div className="flex h-[54px] w-full max-w-[533px] items-center rounded-full border border-[#D41367] bg-white px-6 shadow-sm">
+                    <div className="flex h-[54px] w-full max-w-full lg:max-w-[533px] items-center rounded-full border border-[#D41367] bg-white px-6 shadow-sm">
 
                     <input
                         type="text"
@@ -409,8 +417,8 @@ export default function CatalogPage() {
                 </div>
 
                 {/* LEFT BRAND */}
-                <div className="">
-                    <div className="w-[220px] h-[72px]">
+                <div className="flex justify-center lg:block">
+                    <div className="w-[150px] lg:w-[220px] h-[72px] flex justify-end items-end lg:justify-start lg:items-center">
                         <a href="#">
                             <Image
                             src="/leftsidelogo.png"
@@ -419,7 +427,7 @@ export default function CatalogPage() {
                         height={140}
                         priority
                         unoptimized
-                        className="h-[70px] w-auto object-contain"
+                        className="h-[38px] mb-[2px] lg:mb-[0px] lg:h-[70px] w-auto object-contain"
                             />
                         </a>
                     </div>
@@ -429,7 +437,7 @@ export default function CatalogPage() {
 
             {/* CATEGORY BAR */}
             <section className="relative z-2 bg-[#D41A68] px-6 py-[17px] rounded-b-[6px]">
-                <div className="mx-auto grid max-w-[1360px] grid-cols-7 gap-[18px]">
+               <div className="mx-auto flex gap-3 overflow-x-auto pb-2 lg:grid lg:max-w-[1360px] lg:grid-cols-7 lg:gap-[18px]">
 
                     {categories.map((item, index) => {
 
@@ -449,14 +457,14 @@ export default function CatalogPage() {
                                 : item.title
                             )
                          }
-                        className={`rounded-xl px-3 py-2 text-center shadow-sm transition-all duration-200 cursor-pointer ${
+                        className={`min-w-[31%] shrink-0 rounded-xl px-2 py-3 lg:min-w-0 lg:px-3 lg:py-2 rounded-xl px-2 py-3 lg:px-3 lg:py-2 text-center shadow-sm transition-all duration-200 cursor-pointer ${
                             isActive
                             ? "bg-[#46BAB9]"
                             : "bg-[#f5f5f5] hover:bg-[#46BAB9]"
                         }`}
                         >
                         <h3
-                    className={`text-[17px] leading-[16px] font-bold transition-colors duration-200 ${
+                    className={`text-[12px] lg:text-[17px] leading-[16px] font-bold transition-colors duration-200 ${
                     isActive
                         ? "text-white"
                         : "text-black group-hover:text-white"
@@ -481,8 +489,105 @@ export default function CatalogPage() {
             </section>
         </section>
 
-        {/* PRODUCTS */}
-        <section className="px-10 py-12 bg-[#F5CA5F]">
+        {/* Body aria */}
+        <section className="px-10 py-12 pt-[16px] bg-[#F5CA5F]">
+
+            {/* Shorts options */}
+            <div className="relative mx-auto max-w-[1200px] mb-[60px] flex justify-end">
+
+                <button
+                        onClick={() => setSortOpen(!sortOpen)}
+                        className="group flex h-[50px] min-w-[145px] cursor-pointer items-center justify-between rounded-full border border-[#D41A68] bg-white px-6 shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition-all duration-300 hover:bg-[#D41A68]"
+                    >
+
+                        {/* TEXT */}
+                        <span className="text-[20px] font-normal leading-[17px] text-[#D41A68] transition-all duration-300 group-hover:text-white">
+                        {selectedSort}
+                        </span>
+
+                        {/* ICON */}
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`text-[#D41A68] ml-[-15px] transition-all duration-300 group-hover:text-white ${
+                            sortOpen ? "rotate-180" : ""
+                        }`}
+                        >
+                        <path d="m6 9 6 6 6-6" />
+                        </svg>
+
+                </button>
+
+                {/* DROPDOWN */}
+                {sortOpen && (
+                        <div className="absolute left-0 top-[0px] z-5 w-[300px] rounded-[10px] bg-[#D41A68] p-4 shadow-2xl">
+
+                            {/* POPUP HEADER */}
+                                <div className="mb-6 flex items-center justify-between ">
+
+                                {/* TITLE */}
+                                <h2 className="text-[20px] font-regular text-white">
+                                    בחירה
+                                </h2>
+
+                               {/* CLOSE / COLLAPSE BUTTON */}
+                                <button
+                                onClick={() => setSortOpen(false)}
+                                className="flex h-[46px] w-[46px] cursor-pointer items-center justify-center transition-all duration-300 hover:scale-110"
+                                >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="46"
+                                    height="32"
+                                    viewBox="0 0 17 17"
+                                    fill="none"
+                                    stroke="#ffffff"
+                                    strokeWidth="4"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="rotate-180"
+                                >
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                                </button>
+                                </div>
+
+                        <div className="flex flex-col gap-5">
+
+                            {sortOptions.map((item) => {
+
+                            const active = selectedSort === item;
+
+                            return (
+                                <button
+                                key={item}
+                                onClick={() => {
+                                    setSelectedSort(item);
+                                    setSortOpen(false);
+                                }}
+                                className={`cursor-pointer rounded-full border-[1px] px-6 py-3 text-center text-[20px] font-bold transition-all duration-200 ${
+                                    active
+                                    ? "border-[#46BAB9] bg-[#46BAB9] text-white"
+                                    : "border-[#46BAB9] bg-[#F3F3F3] text-black hover:bg-[#46BAB9] hover:text-white"
+                                }`}
+                                >
+                                {item}
+                                </button>
+                            );
+                            })}
+                        </div>
+                        </div>
+                )}
+            </div>
+
+             {/* products loop */}
             <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[105px] md:grid-cols-2 xl:grid-cols-3">
 
             {filteredProducts.map((product) => (
