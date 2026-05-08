@@ -372,7 +372,7 @@ export default function CatalogPage() {
                         onClick={() => {
                             setSelectedKosher([]);
                             setSelectedBrands([]);
-                            setSelectedDiet([]);
+                            setSelectedDietary([]);
                         }}
                         className="cursor-pointer  rounded-full bg-[#D41A68] px-8 py-3 text-[18px] font-black text-white shadow-md transition-all duration-200 hover:opacity-90"
                         >

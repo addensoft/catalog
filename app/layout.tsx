@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+//import { Rubik } from "next/font/google";
 import "./globals.css";
 
-const rubik = Rubik({
-  subsets: ["hebrew", "latin"],
-  weight: ["300", "400", "500", "700", "900"],
-  display: "swap",
-});
+// const rubik = Rubik({
+//   subsets: ["hebrew", "latin"],
+//   weight: ["300", "400", "500", "700", "900"],
+//   display: "swap",
+// });
 
 export const metadata: Metadata = {
   title: "HUB380 Catalog",
@@ -24,9 +24,7 @@ export default function RootLayout({
       dir="rtl"
       className="h-full scroll-smooth"
     >
-      <body
-        className={`${rubik.className} min-h-full bg-white text-black antialiased`}
-      >
+      <body>
         {children}
       </body>
     </html>
