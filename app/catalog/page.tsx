@@ -1,9 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 import type { Product } from "@/types/product";
+import type { Category } from "@/types/categories";
 
 // import { products } from "@/data/products";
 // import { categories } from "@/data/categories";
@@ -57,7 +58,7 @@ export default function CatalogPage() {
 
     // api call ste
     const [products, setProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [brands, setBrands] = useState([]);
     const [tags, setTags] = useState([]);
 
@@ -109,19 +110,21 @@ export default function CatalogPage() {
 
     // filter toggle 
     const toggleFilter = (
-        value: string,
-        selectedArray: string[],
-        setFunction: React.Dispatch<React.SetStateAction<string[]>>
-        ) => {
-        if (selectedArray.includes(value)) {
-            setFunction(selectedArray.filter((item) => item !== value));
-        } else {
-            setFunction([...selectedArray, value]);
-        }
-        };
+  value: string,
+  selectedArray: string[],
+  setState: React.Dispatch<React.SetStateAction<string[]>>
+) => {
+
+  if (selectedArray.includes(value)) {
+    setState(selectedArray.filter((item) => item !== value));
+  } else {
+    setState([...selectedArray, value]);
+  }
+
+};
 
         // all filters filters
-      const filteredProducts = products.filter((product) => {
+      const filteredProducts = products.filter((product: Product) => {
 
         const categoryMatch =
             selected === "בחירה" ||
@@ -133,7 +136,7 @@ export default function CatalogPage() {
 
         const tagsMatch =
             selectedTags.length === 0 ||
-            product.tags.some((tag) =>
+            product.tags.some((tag: string) =>
                 selectedTags.includes(tag)
             );
 
