@@ -3,17 +3,13 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+import { products } from "@/data/products";
+import { categories } from "@/data/categories";
+import { brands } from "@/data/brands";
+import { tags } from "@/data/tags";
 
-// categories
-const categories = [
-  { title: "ממתקי ילדים" },
-  { title: "ממתקים במשקל" },
-  { title: "מסטיקים" },
-  { title: "מסטיקים וג’ליבינס" },
-  { title: "סוכריות גומי" },
-  { title: "שוקולדים" },
-  { title: "שתייה וליקריצים" },
-];
+
+
 
 // filters
 const filters = [
@@ -22,146 +18,7 @@ const filters = [
   "מסטיקים וג’ליבינס",
 ];
 
-// products
-const products = [
-  {
-    id: 1,
-    category: 'ממתקי ילדים',
-    title: "סורצ'ה בטעם תות שדה ודובדבן",
-    info: "90 מ”ל יח’ | 12 יח’ במארז | 8 מארזים בקרטון \n משקל קרטון 8.64 ק”ג",
-    image: "/products/product-1.png",
-    brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "SCREAMERS",
-    tags: [
-        "כשר פרווה",
-        "בד”צ בית יוסף",
-    ],
-    sku:"5011061107152",
-  },
-  {
-    id: 2,
-    category: "ממתקי ילדים",
-    title: "SWEET&SOUR\n ממתק בטעמי תות ואוכמניות",
-    info: "14 גרם יח’  | 50 יח’ במארז  | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג",
-    image: "/products/product-2.png",
-    brand_image:"/brands/yaams.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "YAMMS",
-    tags: [
-        "כשר פרווה",
-        "בד”צ בית יוסף",
-        "בד”צ בלע”ז",
-    ],
-    sku:"000000000000",
-  },
-  {
-    id: 3,
-    category: "ממתקי ילדים",
-    title: "SWEET&SOUR\n ממתק בטעמי תות ואוכמניות",
-    info: "114 גרם יח’  | 8 יח’ במארז  | 20 מארזים בקרטון\n משקל קרטון 2.24 ק”ג",
-    image: "/products/product-3.png",
-    brand_image:"/brands/yaams.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "YAMMS",
-    tags: [
-        "כשר פרווה",
-        "בד”צ בית יוסף",
-        "בד”צ בלע”ז",
-    ],
-    sku:"6921823510573",
-  },
-  {
-    id: 4,
-    category: "ממתקי ילדים",
-    title: "BIG LICK \n ג’לי נוזלי בטעם אוכמניות חמוץ",
-    info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
-    image: "/products/product4.png",
-    brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "SCREAMERS",
-    tags: [
-        "כשר פרווה",
-        "בד”צ בית יוסף",
-    ],
-    sku:"5011061105066",
-  },
-  {
-    id: 5,
-    category: "ממתקי ילדים",
-    title: "BIG LICK \n ממתק ג’לי נוזלי בטעם פטל חמוץ",
-    info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
-    image: "/products/product5.png",
-    brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "SCREAMERS",
-    tags: [
-        "כשר פרווה",
-        " בד”צ בית יוסף",
-    ],
-    sku:"5011061105042",
-  },
-  {
-    id: 6,
-    category:"ממתקי ילדים",
-    title: "סוכריות קשיחות בצורת בריקים",
-    info: " 70 גרם יח’ | 10 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג", 
-    image: "/products/product6.png",
-    brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "ZED",
-    tags: [
-        "כשר פרווה",
-        "| בד”צ בית יוסף",
-    ],
-    sku:"5011061166661",
-  },
-  {
-    id: 7,
-    category: "ממתקי ילדים",
-    title: "NIPPERS \n סוכריות קראנץ’ בטעמי פירות",
-    info: "10 גרם יח’ | 24 יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
-    image: "/products/product7.png",
-    brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "SCREAMERS",
-    tags: [
-        "כשר פרווה",
-        " בד”צ בית יוסף",
-    ],
-    sku:"5011061107718",
-  },
-   {
-    id: 8,
-    category:"מסטיקים וג’ליבינס",
-    title: "גומי לעיסה בטעמי פירות \n עם מילוי אבקה 5%",
-    info: "19.6 גרם  יח’ | 50  יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
-    image: "/products/product8.png",
-    brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "ZED",
-    tags: [
-        "כשר פרווה",
-       "בד”צ בית יוסף",
-    ],
-    sku:"5011061114105",
-  },
-  {
-    id: 9,
-    category:"מסטיקים וג’ליבינס",
-    title: "מכונת מיני מסטיק",
-    info: " 20 גרם יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 1.44 ק”ג",
-    image: "/products/product9.png",
-    brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
-    brand: "ZED",
-    tags: [
-        "כשר פרווה",
-       "בד”צ בית יוסף",
-    ],
-    sku:"5011061007537",
-  },
-];
+
 
 // popup filter top button
 const topFiltersBtn = [
@@ -381,13 +238,8 @@ export default function CatalogPage() {
                                 </h3>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {[
-                                    "רבנות",
-                                    "בד”צ בית יוסף",
-                                    "בד”צ העדה החרדית",
-                                    "בד”צ בלע”ז",
-                                    "כשל”פ",
-                                    ].map((item) => (
+                                    
+                                    {tags.map((item) => (
                                     <button
                                     onClick={() =>
                                         toggleFilter(
@@ -416,7 +268,7 @@ export default function CatalogPage() {
                                 </h3>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {["YAMMS", "TRILU", "TRINI TARIO", "SCREAMERS","ZED",].map((item) => (
+                                    {brands.map((item) => (
                                     <button
                                     onClick={() =>
                                         toggleFilter(
