@@ -624,7 +624,7 @@ export default function CatalogPage() {
 
                 {/* DROPDOWN */}
                 {sortOpen && (
-                        <div className="absolute left-0 top-[0px] z-5 w-[300px] rounded-[10px] bg-[#D41A68] p-4 shadow-2xl">
+                        <div className="absolute left-0 top-[0px] z-12 w-[300px] rounded-[10px] bg-[#D41A68] p-4 shadow-2xl">
 
                             {/* POPUP HEADER */}
                                 <div className="mb-6 flex items-center justify-between ">
