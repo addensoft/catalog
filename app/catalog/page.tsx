@@ -62,6 +62,8 @@ export default function CatalogPage() {
     const [brands, setBrands] = useState([]);
     const [tags, setTags] = useState([]);
 
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("בחירה");
 
@@ -77,6 +79,7 @@ export default function CatalogPage() {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
 
+    
 
     useEffect(() => {
 
@@ -570,10 +573,14 @@ export default function CatalogPage() {
             <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[105px] md:grid-cols-2 xl:grid-cols-3">
 
             {filteredProducts.map((product) => (
-                <div key={product.id} className=" group relative
+
+                <div key={product.id} 
+                onClick={() => setSelectedProduct(product)}
+                className=" group relative
                     overflow-hidden
                     p-[6px]
                     transition-all
+                    cursor-pointer
                     duration-300">
                         {/* HOVER BORDER */}
                     <div
@@ -655,6 +662,115 @@ export default function CatalogPage() {
             ))}
             </div>
         </section>
+
+        {/* products popup */}
+        {selectedProduct && (
+  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 p-4">
+
+            <div className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[40px] bg-[#F5CA5F] p-[6px]">
+
+  {/* INNER */}
+  <div className="relative rounded-[36px] bg-white px-6 pb-10 pt-14 lg:px-14">
+
+    {/* CLOSE */}
+    <button
+      onClick={() => setSelectedProduct(null)}
+      className="absolute left-4 top-4 z-20 flex h-[45px] w-[45px] items-center justify-center rounded-full bg-[#D41A68] text-[24px] font-bold text-white transition-all duration-300 hover:rotate-90"
+    >
+      ×
+    </button>
+
+    {/* TOP */}
+    <div className="grid gap-10 lg:grid-cols-2">
+
+      {/* IMAGE SIDE */}
+      <div>
+
+        {/* BRAND */}
+        <div className="mb-6 flex justify-center lg:justify-start">
+
+          <Image
+            src={selectedProduct.brand_image}
+            alt={selectedProduct.brand}
+            width={220}
+            height={80}
+            className="h-auto w-auto max-h-[70px] object-contain"
+          />
+        </div>
+
+        {/* PRODUCT IMAGE */}
+        <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
+
+          <Image
+            src={selectedProduct.image}
+            alt={selectedProduct.title}
+            fill
+            className="object-contain"
+          />
+        </div>
+      </div>
+
+      {/* CONTENT */}
+      <div className="flex flex-col justify-center">
+
+        {/* CATEGORY */}
+        <div className="mb-4 flex justify-center lg:justify-start">
+
+          <div className="rounded-full bg-[#57C8C7] px-5 py-2 text-[14px] font-bold text-white">
+            {selectedProduct.category}
+          </div>
+        </div>
+
+        {/* TITLE */}
+        <h2 className="whitespace-pre-line text-center text-[34px] font-black leading-[42px] text-[#D41A68] lg:text-right lg:text-[52px] lg:leading-[60px]">
+          {selectedProduct.title}
+        </h2>
+
+        {/* INFO */}
+        <p className="mt-6 whitespace-pre-line text-center text-[18px] leading-[34px] text-black lg:text-right">
+          {selectedProduct.info}
+        </p>
+
+        {/* TAGS */}
+        <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
+
+          {selectedProduct.tags.map((tag) => (
+            <div
+              key={tag}
+              className="rounded-full bg-[#D41A68] px-5 py-2 text-[15px] font-bold text-white"
+            >
+              {tag}
+            </div>
+          ))}
+
+        </div>
+
+        {/* SKU */}
+        <p className="mt-6 text-center text-[16px] font-bold text-black lg:text-right">
+          מק”ט {selectedProduct.sku}
+        </p>
+
+        {/* BUTTON */}
+        <button
+          className="mx-auto mt-8 flex h-[55px] min-w-[220px] items-center justify-center rounded-full bg-[#D41A68] px-10 text-[22px] font-black text-white transition-all duration-300 hover:scale-105 lg:mx-0"
+        >
+          צור קשר להזמנה
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+)}
     </main>
+    // popup product
+    
+    
   );
+  
+  
 }
+
+// product popop
+

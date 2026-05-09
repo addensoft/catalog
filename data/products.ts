@@ -22,7 +22,7 @@ export const products = [
     info: "14 גרם יח’  | 50 יח’ במארז  | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג",
     image: "/products/product-2.png",
     brand_image:"/brands/yaams.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberry1",
     brand: "YAMMS",
     tags: [
         "כשר פרווה",
@@ -38,7 +38,7 @@ export const products = [
     info: "114 גרם יח’  | 8 יח’ במארז  | 20 מארזים בקרטון\n משקל קרטון 2.24 ק”ג",
     image: "/products/product-3.png",
     brand_image:"/brands/yaams.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberry2",
     brand: "YAMMS",
     tags: [
         "כשר פרווה",
@@ -54,7 +54,7 @@ export const products = [
     info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
     image: "/products/product4.png",
     brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberr3",
     brand: "SCREAMERS",
     tags: [
         "כשר פרווה",
@@ -69,7 +69,7 @@ export const products = [
     info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
     image: "/products/product5.png",
     brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberr4",
     brand: "SCREAMERS",
     tags: [
         "כשר פרווה",
@@ -84,7 +84,7 @@ export const products = [
     info: " 70 גרם יח’ | 10 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג", 
     image: "/products/product6.png",
     brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberr5",
     brand: "ZED",
     tags: [
         "כשר פרווה",
@@ -99,7 +99,7 @@ export const products = [
     info: "10 גרם יח’ | 24 יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
     image: "/products/product7.png",
     brand_image:"/brands/scamers.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberry6",
     brand: "SCREAMERS",
     tags: [
         "כשר פרווה",
@@ -114,7 +114,7 @@ export const products = [
     info: "19.6 גרם  יח’ | 50  יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
     image: "/products/product8.png",
     brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberry7",
     brand: "ZED",
     tags: [
         "כשר פרווה",
@@ -129,7 +129,7 @@ export const products = [
     info: " 20 גרם יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 1.44 ק”ג",
     image: "/products/product9.png",
     brand_image:"/brands/zed.png",
-    slug: "sweet-sour-strawberry-blueberry",
+    slug: "sweet-sour-strawberry-blueberry8",
     brand: "ZED",
     tags: [
         "כשר פרווה",
