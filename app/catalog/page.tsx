@@ -28,72 +28,138 @@ const products = [
     id: 1,
     category: 'ממתקי ילדים',
     title: "סורצ'ה בטעם תות שדה ודובדבן",
-    info: `90 מ”ל יח’ | 12 יח’ במארז | 8 מארזים בקרטון
-    משקל קרטון 8.64 ק”ג`,
-    weight: "כשר פרווה | בד”צ בית יוסף",
+    info: "90 מ”ל יח’ | 12 יח’ במארז | 8 מארזים בקרטון \n משקל קרטון 8.64 ק”ג",
     image: "/products/product-1.png",
-    brand_image:"/brands/zen.png",
+    brand_image:"/brands/scamers.png",
     slug: "sweet-sour-strawberry-blueberry",
-    brand: "YAMMS",
-    kosher: "בד״צ בית יוסף",
-    dietary: "טבעוני",
-    special: "חדש על המדף",
+    brand: "SCREAMERS",
+    tags: [
+        "כשר פרווה",
+        "בד”צ בית יוסף",
+    ],
+    sku:"5011061107152",
   },
   {
     id: 2,
     category: "ממתקי ילדים",
-    title: "SWEET&SOUR\nממתק בטעמי תות ואוכמניות",
-    info: "17 גרם יח׳ | 40 יח׳ במארז | 2 מארזים",
-    weight: "בקרטון משקל קרטון ? ק״ג",
+    title: "SWEET&SOUR\n ממתק בטעמי תות ואוכמניות",
+    info: "14 גרם יח’  | 50 יח’ במארז  | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג",
     image: "/products/product-2.png",
     brand_image:"/brands/yaams.png",
     slug: "sweet-sour-strawberry-blueberry",
     brand: "YAMMS",
-    kosher: "בד״צ בית יוסף",
-    dietary: "טבעוני",
-    special: "חדש על המדף",
+    tags: [
+        "כשר פרווה",
+        "בד”צ בית יוסף",
+        "בד”צ בלע”ז",
+    ],
+    sku:"000000000000",
   },
   {
     id: 3,
     category: "ממתקי ילדים",
     title: "SWEET&SOUR\n ממתק בטעמי תות ואוכמניות",
-    info: "14 גרם יח׳ | 8 יח׳ במארז | 20 מארזים",
-    weight: "בקרטון משקל קרטון 2.24 ק״ג",
+    info: "114 גרם יח’  | 8 יח’ במארז  | 20 מארזים בקרטון\n משקל קרטון 2.24 ק”ג",
     image: "/products/product-3.png",
     brand_image:"/brands/yaams.png",
     slug: "sweet-sour-strawberry-blueberry",
     brand: "YAMMS",
-    kosher: "בד״צ בית יוסף",
-    dietary: "טבעטבעוניוני",
-    special: "חדש על המדף",
+    tags: [
+        "כשר פרווה",
+        "בד”צ בית יוסף",
+        "בד”צ בלע”ז",
+    ],
+    sku:"6921823510573",
   },
   {
     id: 4,
-    category: "מסטיקים",
-    title: "SWEET&SOUR ממתק בטעמי תות ואוכמניות",
-    info: "14 גרם יח׳ | 8 יח׳ במארז | 20 מארזים",
-    weight: "בקרטון משקל קרטון 2.24 ק״ג",
-    image: "/products/product-4.png",
-    brand_image:"/brands/zen.png",
+    category: "ממתקי ילדים",
+    title: "BIG LICK \n ג’לי נוזלי בטעם אוכמניות חמוץ",
+    info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
+    image: "/products/product4.png",
+    brand_image:"/brands/scamers.png",
     slug: "sweet-sour-strawberry-blueberry",
-    brand: "YAMMS",
-    kosher: "בד״צ בית יוסף",
-    dietary: "טבעוני",
-    special: "חדש על המדף",
+    brand: "SCREAMERS",
+    tags: [
+        "כשר פרווה",
+        "בד”צ בית יוסף",
+    ],
+    sku:"5011061105066",
   },
   {
     id: 5,
-    category: "מסטיקים וג’ליבינס",
-    title: "SWEET&SOUR ממתק בטעמי תות ואוכמניות",
-    info: "14 גרם יח׳ | 8 יח׳ במארז | 20 מארזים",
-    weight: "בקרטון משקל קרטון 2.24 ק״ג",
-    image: "/products/product-5.png",
+    category: "ממתקי ילדים",
+    title: "BIG LICK \n ממתק ג’לי נוזלי בטעם פטל חמוץ",
+    info: "60 מ”ל יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.32 ק”ג",
+    image: "/products/product5.png",
+    brand_image:"/brands/scamers.png",
+    slug: "sweet-sour-strawberry-blueberry",
+    brand: "SCREAMERS",
+    tags: [
+        "כשר פרווה",
+        " בד”צ בית יוסף",
+    ],
+    sku:"5011061105042",
+  },
+  {
+    id: 6,
+    category:"ממתקי ילדים",
+    title: "סוכריות קשיחות בצורת בריקים",
+    info: " 70 גרם יח’ | 10 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 4.2 ק”ג", 
+    image: "/products/product6.png",
     brand_image:"/brands/zed.png",
     slug: "sweet-sour-strawberry-blueberry",
-    brand: "YAMMS",
-    kosher: "בד״צ בית יוסף",
-    dietary: "טבעוני",
-    special: "חדש על המדף",
+    brand: "ZED",
+    tags: [
+        "כשר פרווה",
+        "| בד”צ בית יוסף",
+    ],
+    sku:"5011061166661",
+  },
+  {
+    id: 7,
+    category: "ממתקי ילדים",
+    title: "NIPPERS \n סוכריות קראנץ’ בטעמי פירות",
+    info: "10 גרם יח’ | 24 יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
+    image: "/products/product7.png",
+    brand_image:"/brands/scamers.png",
+    slug: "sweet-sour-strawberry-blueberry",
+    brand: "SCREAMERS",
+    tags: [
+        "כשר פרווה",
+        " בד”צ בית יוסף",
+    ],
+    sku:"5011061107718",
+  },
+   {
+    id: 8,
+    category:"מסטיקים וג’ליבינס",
+    title: "גומי לעיסה בטעמי פירות \n עם מילוי אבקה 5%",
+    info: "19.6 גרם  יח’ | 50  יח’ במארז | ? מארזים בקרטון \n משקל קרטון ? ק”ג",
+    image: "/products/product8.png",
+    brand_image:"/brands/zed.png",
+    slug: "sweet-sour-strawberry-blueberry",
+    brand: "ZED",
+    tags: [
+        "כשר פרווה",
+       "בד”צ בית יוסף",
+    ],
+    sku:"5011061114105",
+  },
+  {
+    id: 9,
+    category:"מסטיקים וג’ליבינס",
+    title: "מכונת מיני מסטיק",
+    info: " 20 גרם יח’ | 12 יח’ במארז | 6 מארזים בקרטון \n משקל קרטון 1.44 ק”ג",
+    image: "/products/product9.png",
+    brand_image:"/brands/zed.png",
+    slug: "sweet-sour-strawberry-blueberry",
+    brand: "ZED",
+    tags: [
+        "כשר פרווה",
+       "בד”צ בית יוסף",
+    ],
+    sku:"5011061007537",
   },
 ];
 
@@ -691,10 +757,18 @@ export default function CatalogPage() {
                 <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
                     {product.weight}
                 </p>
+                <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
+                {   product.tags.join(" | ")}
+                </p>
+
+                {/* product sku */}
+                 <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
+                    מק”ט {product.sku}
+                </p>
                 {/* product buttom */}
                 <Link
                     href={`/products/${product.slug}`}
-                    className="cursor-pointer mx-auto mt-5 flex h-[40px] max-w-[161px] items-center justify-center rounded-full bg-[#D41A68] px-8 text-center text-[18px] font-black leading-[20px] text-white transition-all duration-200 hover:opacity-90"
+                    className="cursor-pointer mx-auto mt-1 flex h-[40px] max-w-[161px] items-center justify-center rounded-full bg-[#D41A68] px-8 text-center text-[18px] font-black leading-[20px] text-white transition-all duration-200 hover:opacity-90"
                     >
                     צפה במוצר
                 </Link>
