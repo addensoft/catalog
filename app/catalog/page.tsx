@@ -210,7 +210,6 @@ export default function CatalogPage() {
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
-    const [selectedSpecial, setSelectedSpecial] = useState<string[]>([]);
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -374,7 +373,7 @@ export default function CatalogPage() {
 
                                     </div>
                               
-                                {/* SECTION */}
+                                {/* TAGS */}
                                 <div className="mb-3 flex items-center gap-4">
 
                                 <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
@@ -522,7 +521,7 @@ export default function CatalogPage() {
                         <div className="w-[150px] lg:w-[220px] h-[72px] flex justify-end items-end lg:justify-start lg:items-center">
                             <a href="#">
                                 <Image
-                                src="/leftsidelogo.png"
+                                src="/leftsidelogo.webp"
                                 alt="left logo"
                         width={440}
                             height={140}
