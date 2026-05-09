@@ -206,7 +206,7 @@ export default function CatalogPage() {
                     {/* RIGHT LOGO AREA */}
                     <div className="flex w-full items-baseline lg:items-center justify-start lg:justify-between pb-0 lg:w-auto lg:pb-0">
                         <div className="text-right leading-none">
-                            <div className="relative z-1 lg:mb-[-52px] mb-[-24px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
+                            <div className="relative z-1 lg:mb-[-40px] mb-[-24px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
                                 <Image 
                                 src="/right-icon.png"
                                 alt="right-icon"
