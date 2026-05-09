@@ -708,7 +708,7 @@ export default function CatalogPage() {
                         src="/hover-border.png"
                         alt="border"
                         fill
-                        className="object-cover"
+                        className="object-fill"
                         />
                     </div>
                <div className="relative z-10 flex h-full flex-col bg-white px-[25px] pb-10 pt-8">
