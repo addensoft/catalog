@@ -241,24 +241,24 @@ export default function CatalogPage() {
             selectedBrands.length === 0 ||
             selectedBrands.includes(product.brand);
 
-        const kosherMatch =
-            selectedKosher.length === 0 ||
-            selectedKosher.includes(product.kosher);
+        // const kosherMatch =
+        //     selectedKosher.length === 0 ||
+        //     selectedKosher.includes(product.kosher);
 
-        const dietaryMatch =
-            selectedDietary.length === 0 ||
-            selectedDietary.includes(product.dietary);
+        // const dietaryMatch =
+        //     selectedDietary.length === 0 ||
+        //     selectedDietary.includes(product.dietary);
 
-        const specialMatch =
-            selectedSpecial.length === 0 ||
-            selectedSpecial.includes(product.special);
+        // const specialMatch =
+        //     selectedSpecial.length === 0 ||
+        //     selectedSpecial.includes(product.special);
 
         return (
             categoryMatch &&
-            brandMatch &&
-            kosherMatch &&
-            dietaryMatch &&
-            specialMatch
+            brandMatch 
+            // kosherMatch &&
+            // dietaryMatch &&
+            // specialMatch
         );
         });
 
@@ -753,10 +753,6 @@ export default function CatalogPage() {
                     {product.info}
                 </p>
                 </div>
-
-                <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
-                    {product.weight}
-                </p>
                 <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
                 {   product.tags.join(" | ")}
                 </p>
