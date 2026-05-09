@@ -199,7 +199,7 @@ export default function CatalogPage() {
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("בחירה");
 
-        // short option const
+    // short option const
     const [sortOpen, setSortOpen] = useState(false);
     const [selectedSort, setSelectedSort] = useState("סדר לפי");
 
@@ -208,7 +208,7 @@ export default function CatalogPage() {
 
 
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-    const [selectedKosher, setSelectedKosher] = useState<string[]>([]);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
     const [selectedSpecial, setSelectedSpecial] = useState<string[]>([]);
 
@@ -241,6 +241,12 @@ export default function CatalogPage() {
             selectedBrands.length === 0 ||
             selectedBrands.includes(product.brand);
 
+        const tagsMatch =
+            selectedTags.length === 0 ||
+            product.tags.some((tag) =>
+                selectedTags.includes(tag)
+            );
+
         // const kosherMatch =
         //     selectedKosher.length === 0 ||
         //     selectedKosher.includes(product.kosher);
@@ -255,10 +261,8 @@ export default function CatalogPage() {
 
         return (
             categoryMatch &&
-            brandMatch 
-            // kosherMatch &&
-            // dietaryMatch &&
-            // specialMatch
+            brandMatch &&
+            tagsMatch
         );
         });
 
@@ -389,12 +393,12 @@ export default function CatalogPage() {
                                     onClick={() =>
                                         toggleFilter(
                                             item,
-                                            selectedKosher,
-                                            setSelectedKosher
+                                            selectedTags,
+                                            setSelectedTags
                                         )
-                                    }
+                                        }
                                     className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                        selectedKosher.includes(item)
+                                        selectedTags.includes(item)
                                             ? "bg-[#F5CA5F] text-black"
                                             : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
                                         }`}
@@ -475,7 +479,7 @@ export default function CatalogPage() {
 
                             <button
                             onClick={() => {
-                                setSelectedKosher([]);
+                                setSelectedTags([]);
                                 setSelectedBrands([]);
                                 setSelectedDietary([]);
                             }}
