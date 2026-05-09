@@ -88,7 +88,7 @@ export const products = [
     brand: "ZED",
     tags: [
         "כשר פרווה",
-        "| בד”צ בית יוסף",
+        "בד”צ בית יוסף",
     ],
     sku:"5011061166661",
   },
@@ -103,7 +103,7 @@ export const products = [
     brand: "SCREAMERS",
     tags: [
         "כשר פרווה",
-        " בד”צ בית יוסף",
+        "בד”צ בית יוסף",
     ],
     sku:"5011061107718",
   },

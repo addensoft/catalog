@@ -3,5 +3,4 @@ export const brands = [
   "YAMMS",
   "TRINI TARIO",
   "ZED",
-  "ADS"
 ];

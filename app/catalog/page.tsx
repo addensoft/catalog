@@ -1,12 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { products } from "@/data/products";
-import { categories } from "@/data/categories";
-import { brands } from "@/data/brands";
-import { tags } from "@/data/tags";
+import type { Product } from "@/types/product";
+
+// import { products } from "@/data/products";
+// import { categories } from "@/data/categories";
+// import { brands } from "@/data/brands";
+// import { tags } from "@/data/tags";
 
 
 
@@ -53,6 +55,12 @@ const sortOptions = [
 
 export default function CatalogPage() {
 
+    // api call ste
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+    const [tags, setTags] = useState([]);
+
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("בחירה");
 
@@ -67,6 +75,32 @@ export default function CatalogPage() {
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            const productsRes = await fetch("/api/products");
+            const productsData = await productsRes.json();
+            setProducts(productsData);
+
+            const categoriesRes = await fetch("/api/categories");
+            const categoriesData = await categoriesRes.json();
+            setCategories(categoriesData);
+
+            const brandsRes = await fetch("/api/brands");
+            const brandsData = await brandsRes.json();
+            setBrands(brandsData);
+
+            const tagsRes = await fetch("/api/tags");
+            const tagsData = await tagsRes.json();
+            setTags(tagsData);
+        };
+
+        fetchData();
+
+        }, []);
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -103,17 +137,7 @@ export default function CatalogPage() {
                 selectedTags.includes(tag)
             );
 
-        // const kosherMatch =
-        //     selectedKosher.length === 0 ||
-        //     selectedKosher.includes(product.kosher);
 
-        // const dietaryMatch =
-        //     selectedDietary.length === 0 ||
-        //     selectedDietary.includes(product.dietary);
-
-        // const specialMatch =
-        //     selectedSpecial.length === 0 ||
-        //     selectedSpecial.includes(product.special);
 
         return (
             categoryMatch &&
