@@ -97,6 +97,22 @@ const products = [
   },
 ];
 
+// popup filter top button
+const topFiltersBtn = [
+  {
+    id: 1,
+    title: "חדש על המדף",
+  },
+  {
+    id: 2,
+    title: "כל הממתקים",
+  },
+  {
+    id: 3,
+    title: "כשל״פ",
+  },
+];
+
 // short options
 const sortOptions = [
   "תאריך (מחדש לישן)",
@@ -129,10 +145,6 @@ export default function CatalogPage() {
     const [selectedKosher, setSelectedKosher] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
     const [selectedSpecial, setSelectedSpecial] = useState<string[]>([]);
-
-
-
-    
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -191,247 +203,266 @@ export default function CatalogPage() {
             {/* TOP HEADER */}
             <header className="bg-[#ffffff] max-w-[1400px] mx-auto px-2 lg:px-6 pt-[12px] lg:pt-[32px] pb-0 bg-[url('/mobile-header-bg.svg')] bg-cover bg-top bg-no-repeat lg:bg-none">
                 <div className="mx-auto flex max-w-[1600px] lg:flex-row lg:items-center lg:justify-between lg:gap-6">
-                {/* RIGHT LOGO AREA */}
-               <div className="flex w-full items-baseline lg:items-center justify-start lg:justify-between pb-0 lg:w-auto lg:pb-0">
-                    <div className="text-right leading-none">
-                    <div className="relative z-1 lg:mb-[-52px] mb-[-24px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
-                        <Image 
-                        src="/right-icon.png"
-                        alt="right-icon"
-                        width={140}
-                        height={200}
-                        className="h-auto w-[100px] lg:w-[140px]"
-                        />
-                    </div>
-
-                    </div>
-
-                    <div className="mb-[-5px]">
-                        <Image
-                            src="/yearbrand.png"
-                            alt="right-icon"
-                            width={168}
-                            height={70}
-                            className="h-auto w-[120px] lg:w-[168px]"
-                            />
-                    </div>
-                </div>
-
-                {/* SEARCH AREA */}
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:gap-5">
-
-                    {/* FILTER */}
-
-                   <div className="relative">
-
-                    {/* BUTTON */}
-                    <button
-                        onClick={() => setOpen(!open)}
-                      className="group flex h-[55px] min-w-0 lg:min-w-[144px] w-auto cursor-pointer items-center justify-between gap-3 rounded-full border border-[#D41A68] bg-white px-6 shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition-all duration-300 hover:bg-[#D41A68]"
-                    >
-
-                        {/* TEXT */}
-                        <span className="whitespace-nowrap text-[20px] font-normal text-[#D41A68] transition-colors duration-300  group-hover:text-[#ffffff]">
-                        {selected}
-                        </span>
-
-                        {/* ICON */}
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="26"
-                        height="26"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#D41A68"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className={`ml-[-12px] shrink-0 transition-transform duration-300 group-hover:stroke-[#ffffff] ${
-                            open ? "rotate-0" : "rotate-180"
-                        }`}
-                        >
-                        <path d="m6 9 6 6 6-6" />
-                        </svg>
-                    </button>
-
-                    {/* DROPDOWN */}
-                   {open && (
-                        <div className="absolute right-0 top-[72px] z-50 w-full lg:w-[980px] rounded-[32px] bg-[#46BAB9] p-8 px-5 shadow-2xl backdrop-blur-sm">
-
-                            {/* TOP FILTER BUTTONS */}
-                            <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
-
-                            <button className="rounded-[7px] border-2 border-white bg-[#D41A68] px-9 py-4 text-[30px] font-medium leading-[16px] text-white shadow-md">
-                                חדש על המדף
-                            </button>
-
-                            <button className="rounded-[7px] border-2 border-white bg-[#D41A68] px-9 py-4 text-[30px] font-medium leading-[16px] text-white shadow-md">
-                                כל הממתקים
-                            </button>
-
-                            <button className="rounded-[7px] border-2 border-white bg-[#D41A68] px-9 py-4 text-[30px] font-medium leading-[16px] text-white shadow-md">
-                                כשל״פ
-                            </button>
-                            </div>
-                            {/* SECTION */}
-                            <div className="mb-3 flex items-center gap-4">
-
-                            <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
-                                סינון לפי כשרות
-                            </h3>
-
-                            <div className="flex flex-wrap gap-3">
-                                {[
-                                "רבנות",
-                                "בד”צ בית יוסף",
-                                "בד”צ העדה החרדית",
-                                "בד”צ בלע”ז",
-                                "כשל”פ",
-                                ].map((item) => (
-                                <button
-                                  onClick={() =>
-                                    toggleFilter(
-                                        item,
-                                        selectedKosher,
-                                        setSelectedKosher
-                                    )
-                                }
-                                className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                    selectedKosher.includes(item)
-                                        ? "bg-[#F5CA5F] text-black"
-                                        : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
-                                    }`}
-                                >
-                                    {item}
-                                </button>
-                                ))}
-                            </div>
-                            </div>
-
-                            {/* BRANDS */}
-                            <div className="mb-3 flex items-center gap-4">
-
-                            <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
-                                סינון לפי מותג
-                            </h3>
-
-                            <div className="flex flex-wrap gap-3">
-                                {["YAMMS", "TRILU", "TRINI TARIO", "SCREAMERS","ZED",].map((item) => (
-                                <button
-                                   onClick={() =>
-                                    toggleFilter(
-                                        item,
-                                        selectedBrands,
-                                        setSelectedBrands
-                                    )
-                                }
-                                    className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                    selectedBrands.includes(item)
-                                        ? "bg-[#F5CA5F] text-black"
-                                        : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
-                                    }`}
-                                >
-                                    {item}
-                                </button>
-                                ))}
-                            </div>
-                            </div>
-
-                            {/* SPECIAL */}
-                            <div className="mb-3 flex items-center gap-4">
-
-                            <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
-                                סינון לפי העדפה תזונתית
-                            </h3>
-
-                            <div className="flex flex-wrap gap-3">
-                                {["טבעוני", "פרווה", "ללא גלוטן", "ללא סוכר"].map((item) => (
-                                <button
-                                   onClick={() =>
-                                    toggleFilter(
-                                        item,
-                                        selectedDietary,
-                                        setSelectedDietary
-                                    )
-                                }
-                                    className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                      selectedDietary.includes(item)
-                                        ? "bg-[#F5CA5F] text-black" 
-                                        : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
-                                    }`}
-                                >
-                                    {item}
-                                </button>
-                                ))}
-                            </div>
-                            </div>
-
-                            {/* BOTTOM ACTIONS */}
-                            <div className="flex items-center justify-between">
-
-                            <button
-                                onClick={() => setOpen(false)}
-                                className="rounded-full bg-white px-6 py-3 text-[18px] font-bold text-[#D41A68] shadow-md transition-all duration-200 hover:scale-105"
-                            >
-                                סגור
-                            </button>
-
-                        <button
-                        onClick={() => {
-                            setSelectedKosher([]);
-                            setSelectedBrands([]);
-                            setSelectedDietary([]);
-                        }}
-                        className="cursor-pointer  rounded-full bg-[#D41A68] px-8 py-3 text-[18px] font-black text-white shadow-md transition-all duration-200 hover:opacity-90"
-                        >
-                        נקה סינון
-                        </button>
+                    {/* RIGHT LOGO AREA */}
+                    <div className="flex w-full items-baseline lg:items-center justify-start lg:justify-between pb-0 lg:w-auto lg:pb-0">
+                        <div className="text-right leading-none">
+                            <div className="relative z-1 lg:mb-[-52px] mb-[-24px] mr-[-30px] duration-300 hover:-translate-y-[8px] hover:rotate-[8deg]">
+                                <Image 
+                                src="/right-icon.png"
+                                alt="right-icon"
+                                width={140}
+                                height={200}
+                                className="h-auto w-[100px] lg:w-[140px]"
+                                />
                             </div>
                         </div>
-                        )}
-                    </div>
-                    {/* SEARCH */}
-                    <div className="flex h-[54px] w-full max-w-full lg:max-w-[533px] items-center rounded-full border border-[#D41367] bg-white px-6 shadow-sm">
 
-                    <input
-                        type="text"
-                        placeholder="חפש מוצר"
-                        className="w-full bg-transparent text-right text-[20px] font-bold text-black outline-none placeholder:text-[#000000]"
-                    />
-
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2.5}
-                        stroke="currentColor"
-                        className="h-9 w-9 text-black"
-                    >
-                        <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                        />
-                    </svg>
-                    </div>
-                </div>
-
-                {/* LEFT BRAND */}
-                <div className="flex justify-center lg:block">
-                    <div className="w-[150px] lg:w-[220px] h-[72px] flex justify-end items-end lg:justify-start lg:items-center">
-                        <a href="#">
+                        <div className="mb-[-5px]">
                             <Image
-                            src="/leftsidelogo.png"
-                            alt="left logo"
-                       width={440}
-                        height={140}
-                        priority
-                        unoptimized
-                        className="h-[38px] mb-[2px] lg:mb-[0px] lg:h-[70px] w-auto object-contain"
-                            />
-                        </a>
+                                src="/yearbrand.png"
+                                alt="right-icon"
+                                width={168}
+                                height={70}
+                                className="h-auto w-[120px] lg:w-[168px]"
+                                />
+                        </div>
                     </div>
-                </div>
+
+                    {/* SEARCH AREA */}
+                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:gap-5">
+
+                        {/* FILTER */}
+                    <div className="relative">
+
+                        {/* BUTTON */}
+                        <button
+                            onClick={() => setOpen(!open)}
+                            className="group flex h-[55px] min-w-0 lg:min-w-[144px] w-auto cursor-pointer items-center justify-between gap-3 rounded-full border border-[#D41A68] bg-white px-6 shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition-all duration-300 hover:bg-[#D41A68]"
+                        >
+                            {/* TEXT */}
+                            <span className="whitespace-nowrap text-[20px] font-normal text-[#D41A68] transition-colors duration-300  group-hover:text-[#ffffff]">
+                            {selected}
+                            </span>
+
+                            {/* ICON */}
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="26"
+                            height="26"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#D41A68"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={`ml-[-12px] shrink-0 transition-transform duration-300 group-hover:stroke-[#ffffff] ${
+                                open ? "rotate-0" : "rotate-180"
+                            }`}
+                            >
+                            <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+
+                        {/* DROPDOWN */}
+                        {open && (
+                            <div className="absolute right-0 top-[72px] z-50 w-full lg:w-[980px] rounded-[32px] bg-[#46BAB9] p-8 px-5 shadow-2xl backdrop-blur-sm">
+
+                                {/* TOP FILTER BUTTONS */}
+                                <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
+
+                                    {topFiltersBtn.map((item) => (
+                                        <button
+                                        key={item.id}
+                                        className="
+                                        relative
+                                        overflow-hidden
+                                        rounded-[7px]
+                                        border-2
+                                        border-white
+                                        px-9
+                                        py-4
+                                        text-[30px]
+                                        bg-[url('/btnbgpjpg.jpg')]
+                                        bg-no-repeat bg-[length:100%_100%]
+                                        font-medium
+                                        leading-[16px]
+                                        text-white
+                                        shadow-md
+                                        transition-all
+                                        duration-300
+                                        hover:scale-105
+                                        "
+                                        >
+
+                                        {/* TEXT */}
+                                        <span className="relative z-10">
+                                            {item.title}
+                                        </span>
+
+                                        </button>
+                                    ))}
+
+                                    </div>
+                              
+                                {/* SECTION */}
+                                <div className="mb-3 flex items-center gap-4">
+
+                                <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
+                                    סינון לפי כשרות
+                                </h3>
+
+                                <div className="flex flex-wrap gap-3">
+                                    {[
+                                    "רבנות",
+                                    "בד”צ בית יוסף",
+                                    "בד”צ העדה החרדית",
+                                    "בד”צ בלע”ז",
+                                    "כשל”פ",
+                                    ].map((item) => (
+                                    <button
+                                    onClick={() =>
+                                        toggleFilter(
+                                            item,
+                                            selectedKosher,
+                                            setSelectedKosher
+                                        )
+                                    }
+                                    className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
+                                        selectedKosher.includes(item)
+                                            ? "bg-[#F5CA5F] text-black"
+                                            : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
+                                        }`}
+                                    >
+                                        {item}
+                                    </button>
+                                    ))}
+                                </div>
+                                </div>
+
+                                {/* BRANDS */}
+                                <div className="mb-3 flex items-center gap-4">
+
+                                <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
+                                    סינון לפי מותג
+                                </h3>
+
+                                <div className="flex flex-wrap gap-3">
+                                    {["YAMMS", "TRILU", "TRINI TARIO", "SCREAMERS","ZED",].map((item) => (
+                                    <button
+                                    onClick={() =>
+                                        toggleFilter(
+                                            item,
+                                            selectedBrands,
+                                            setSelectedBrands
+                                        )
+                                    }
+                                        className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
+                                        selectedBrands.includes(item)
+                                            ? "bg-[#F5CA5F] text-black"
+                                            : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
+                                        }`}
+                                    >
+                                        {item}
+                                    </button>
+                                    ))}
+                                </div>
+                                </div>
+
+                                {/* SPECIAL */}
+                                <div className="mb-3 flex items-center gap-4">
+
+                                <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
+                                    סינון לפי העדפה תזונתית
+                                </h3>
+
+                                <div className="flex flex-wrap gap-3">
+                                    {["טבעוני", "פרווה", "ללא גלוטן", "ללא סוכר"].map((item) => (
+                                    <button
+                                    onClick={() =>
+                                        toggleFilter(
+                                            item,
+                                            selectedDietary,
+                                            setSelectedDietary
+                                        )
+                                    }
+                                        className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
+                                        selectedDietary.includes(item)
+                                            ? "bg-[#F5CA5F] text-black" 
+                                            : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
+                                        }`}
+                                    >
+                                        {item}
+                                    </button>
+                                    ))}
+                                </div>
+                                </div>
+
+                                {/* BOTTOM ACTIONS */}
+                                <div className="flex items-center justify-between">
+
+                                <button
+                                    onClick={() => setOpen(false)}
+                                    className="rounded-full bg-white px-6 py-3 text-[18px] font-bold text-[#D41A68] shadow-md transition-all duration-200 hover:scale-105"
+                                >
+                                    סגור
+                                </button>
+
+                            <button
+                            onClick={() => {
+                                setSelectedKosher([]);
+                                setSelectedBrands([]);
+                                setSelectedDietary([]);
+                            }}
+                            className="cursor-pointer  rounded-full bg-[#D41A68] px-8 py-3 text-[18px] font-black text-white shadow-md transition-all duration-200 hover:opacity-90"
+                            >
+                            נקה סינון
+                            </button>
+                                </div>
+                            </div>
+                            )}
+                        </div>
+                        {/* SEARCH */}
+                        <div className="flex h-[54px] w-full max-w-full lg:max-w-[533px] items-center rounded-full border border-[#D41367] bg-white px-6 shadow-sm">
+
+                        <input
+                            type="text"
+                            placeholder="חפש מוצר"
+                            className="w-full bg-transparent text-right text-[20px] font-bold text-black outline-none placeholder:text-[#000000]"
+                        />
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                            className="h-9 w-9 text-black"
+                        >
+                            <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+                            />
+                        </svg>
+                        </div>
+                    </div>
+
+                    {/* LEFT BRAND */}
+                    <div className="flex justify-center lg:block">
+                        <div className="w-[150px] lg:w-[220px] h-[72px] flex justify-end items-end lg:justify-start lg:items-center">
+                            <a href="#">
+                                <Image
+                                src="/leftsidelogo.png"
+                                alt="left logo"
+                        width={440}
+                            height={140}
+                            priority
+                            unoptimized
+                            className="h-[38px] mb-[2px] lg:mb-[0px] lg:h-[70px] w-auto object-contain"
+                                />
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </header>
 
