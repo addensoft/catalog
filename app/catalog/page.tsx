@@ -588,33 +588,33 @@ export default function CatalogPage() {
             </div>
 
              {/* products loop */}
-            <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[105px] md:grid-cols-2 xl:grid-cols-3">
+            <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[105px] md:grid-cols-2 xl:grid-cols-3">
 
             {filteredProducts.map((product) => (
                 <div key={product.id} className=" group relative
-  overflow-hidden
-  p-[6px]
-  transition-all
-  duration-300">
-      {/* HOVER BORDER */}
-  <div
-    className="
-    absolute
-    inset-0
-    opacity-0
-    transition-all
-    duration-300
-    group-hover:opacity-100
-  "
-  >
-    <Image
-      src="/hover-border.png"
-      alt="border"
-      fill
-      className="object-cover"
-    />
-  </div>
-                <div className="relative z-10 bg-white px-[25px] pb-10 pt-8">
+                    overflow-hidden
+                    p-[6px]
+                    transition-all
+                    duration-300">
+                        {/* HOVER BORDER */}
+                    <div
+                        className="
+                        absolute
+                        inset-0
+                        opacity-0
+                        transition-all
+                        duration-300
+                        group-hover:opacity-100
+                    "
+                    >
+                        <Image
+                        src="/hover-border.png"
+                        alt="border"
+                        fill
+                        className="object-cover"
+                        />
+                    </div>
+               <div className="relative z-10 flex h-full flex-col bg-white px-[25px] pb-10 pt-8">
                 {/* TOP */}
                 <div className=" flex items-start justify-end">
                     <div className="absolute right-0 top-[34px] rounded-tl-full rounded-bl-full bg-[#57c8c7] px-3 py-1 text-[13px] font-medium text-white">
@@ -651,7 +651,7 @@ export default function CatalogPage() {
                 </h2>
 
                 {/* INFO */}
-                <div className="relative min-h-[40px]">
+                <div className="relative flex-1">
                 <p className="whitespace-pre-line text-center text-[13px] leading-[16px] leading-[20px] font-medium text-black">
                     {product.info}
                 </p>
