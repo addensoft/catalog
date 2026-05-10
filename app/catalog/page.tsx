@@ -570,7 +570,7 @@ export default function CatalogPage() {
             </div>
 
              {/* products loop */}
-            <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[105px] md:grid-cols-2 xl:grid-cols-3">
+            <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[96px] md:grid-cols-2 xl:grid-cols-3">
 
             {filteredProducts.map((product) => (
 
@@ -765,7 +765,6 @@ export default function CatalogPage() {
 )}
     </main>
     // popup product
-    
     
   );
   

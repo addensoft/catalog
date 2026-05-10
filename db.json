@@ -1,0 +1,21 @@
+{
+  "products": [
+
+     {
+    "id": 1,
+    "category": "ילדים",
+    "title": "סורצ'ה בטעם תות שדה ודובדבן",
+    "info": "90 מ”ל יח’ | 12 יח’ במארז | 8 מארזים בקרטון \n משקל קרטון 8.64 ק”ג",
+    "image": "/products/product-1.png",
+    "brand_image":"/brands/scamers.png",
+    "slug": "sweet-sour-strawberry-blueberry",
+    "brand": "SCREAMERS",
+    "tags": [
+        "כשר פרווה",
+        "בד”צ בית יוסף"
+    ],
+    "sku":"5011061107152"
+  }
+    
+  ]
+}
