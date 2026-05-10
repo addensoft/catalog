@@ -5,6 +5,8 @@ import Image from "next/image";
 
 import type { Product } from "@/types/product";
 import type { Category } from "@/types/categories";
+import type { Tag } from "@/types/tag";
+import type { Brand } from "@/types/brands";
 
 // import { products } from "@/data/products";
 // import { categories } from "@/data/categories";
@@ -39,6 +41,15 @@ const topFiltersBtn = [
   },
 ];
 
+// ditery filter content
+
+const diteryFilterBtn = [
+    "טבעוני",   
+    "פרווה", 
+    "ללא גלוטן", 
+    "ללא סוכר"
+];
+
 // short options
 const sortOptions = [
   "תאריך (מחדש לישן)",
@@ -49,18 +60,13 @@ const sortOptions = [
   "שם (א-ת)",
 ];
 
-
-
-
-
-
 export default function CatalogPage() {
 
     // api call ste
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [brands, setBrands] = useState([]);
-    const [tags, setTags] = useState([]);
+    const [brands, setBrands] = useState<Brand[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -154,7 +160,7 @@ export default function CatalogPage() {
 
   return (
     <main dir="rtl" className="min-h-screen bg-[#F5CA5F]">
-
+        {/* top header aria */}
         <section className="sticky top-0 z-50 bg-[#ffffff] px-[1px] pt-0 pb-[2px]">
             {/* TOP HEADER */}
             <header className="bg-[#ffffff] max-w-[1400px] mx-auto px-2 lg:px-6 pt-[12px] lg:pt-[32px] pb-0 bg-[url('/mobile-header-bg.svg')] bg-cover bg-top bg-no-repeat lg:bg-none">
@@ -260,7 +266,7 @@ export default function CatalogPage() {
 
                                     </div>
                               
-                                {/* TAGS */}
+                                {/* TAGS  kodish*/}
                                 <div className="mb-3 flex items-center gap-4">
 
                                 <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
@@ -270,21 +276,21 @@ export default function CatalogPage() {
                                 <div className="flex flex-wrap gap-3">
                                     
                                     {tags.map((item) => (
-                                    <button
+                                    <button key={item.id}
                                     onClick={() =>
                                         toggleFilter(
-                                            item,
+                                            item.name,
                                             selectedTags,
                                             setSelectedTags
                                         )
                                         }
                                     className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                        selectedTags.includes(item)
+                                        selectedTags.includes(item.name)
                                             ? "bg-[#F5CA5F] text-black"
                                             : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
                                         }`}
                                     >
-                                        {item}
+                                        {item.name}
                                     </button>
                                     ))}
                                 </div>
@@ -299,27 +305,27 @@ export default function CatalogPage() {
 
                                 <div className="flex flex-wrap gap-3">
                                     {brands.map((item) => (
-                                    <button
+                                    <button key={item.id}
                                     onClick={() =>
                                         toggleFilter(
-                                            item,
+                                            item.name,
                                             selectedBrands,
                                             setSelectedBrands
                                         )
                                     }
                                         className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                        selectedBrands.includes(item)
+                                        selectedBrands.includes(item.name)
                                             ? "bg-[#F5CA5F] text-black"
                                             : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
                                         }`}
                                     >
-                                        {item}
+                                        {item.name}
                                     </button>
                                     ))}
                                 </div>
                                 </div>
 
-                                {/* SPECIAL */}
+                                {/* SPECIAL ditery */}
                                 <div className="mb-3 flex items-center gap-4">
 
                                 <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">
@@ -327,7 +333,7 @@ export default function CatalogPage() {
                                 </h3>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {["טבעוני", "פרווה", "ללא גלוטן", "ללא סוכר"].map((item) => (
+                                    {diteryFilterBtn.map((item) => (
                                     <button
                                     onClick={() =>
                                         toggleFilter(
@@ -665,104 +671,104 @@ export default function CatalogPage() {
 
         {/* products popup */}
         {selectedProduct && (
-  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 p-4">
+            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 p-4">
 
             <div className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[40px] bg-[#F5CA5F] p-[6px]">
 
-  {/* INNER */}
-  <div className="relative rounded-[36px] bg-white px-6 pb-10 pt-14 lg:px-14">
+            {/* INNER */}
+            <div className="relative rounded-[36px] bg-white px-6 pb-10 pt-14 lg:px-14">
 
-    {/* CLOSE */}
-    <button
-      onClick={() => setSelectedProduct(null)}
-      className="absolute left-4 top-4 z-20 flex h-[45px] w-[45px] items-center justify-center rounded-full bg-[#D41A68] text-[24px] font-bold text-white transition-all duration-300 hover:rotate-90"
-    >
-      ×
-    </button>
+                {/* CLOSE */}
+                <button
+                onClick={() => setSelectedProduct(null)}
+                className="absolute left-4 top-4 z-20 flex h-[45px] w-[45px] items-center justify-center rounded-full bg-[#D41A68] text-[24px] font-bold text-white transition-all duration-300 hover:rotate-90"
+                >
+                ×
+                </button>
 
-    {/* TOP */}
-    <div className="grid gap-10 lg:grid-cols-2">
+                {/* TOP */}
+                <div className="grid gap-10 lg:grid-cols-2">
 
-      {/* IMAGE SIDE */}
-      <div>
+                {/* IMAGE SIDE */}
+                <div>
 
-        {/* BRAND */}
-        <div className="mb-6 flex justify-center lg:justify-start">
+                    {/* BRAND */}
+                    <div className="mb-6 flex justify-center lg:justify-start">
 
-          <Image
-            src={selectedProduct.brand_image}
-            alt={selectedProduct.brand}
-            width={220}
-            height={80}
-            className="h-auto w-auto max-h-[70px] object-contain"
-          />
-        </div>
+                    <Image
+                        src={selectedProduct.brand_image}
+                        alt={selectedProduct.brand}
+                        width={220}
+                        height={80}
+                        className="h-auto w-auto max-h-[70px] object-contain"
+                    />
+                    </div>
 
-        {/* PRODUCT IMAGE */}
-        <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
+                    {/* PRODUCT IMAGE */}
+                    <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
 
-          <Image
-            src={selectedProduct.image}
-            alt={selectedProduct.title}
-            fill
-            className="object-contain"
-          />
-        </div>
-      </div>
+                    <Image
+                        src={selectedProduct.image}
+                        alt={selectedProduct.title}
+                        fill
+                        className="object-contain"
+                    />
+                    </div>
+                </div>
 
-      {/* CONTENT */}
-      <div className="flex flex-col justify-center">
+                {/* CONTENT */}
+                <div className="flex flex-col justify-center">
 
-        {/* CATEGORY */}
-        <div className="mb-4 flex justify-center lg:justify-start">
+                    {/* CATEGORY */}
+                    <div className="mb-4 flex justify-center lg:justify-start">
 
-          <div className="rounded-full bg-[#57C8C7] px-5 py-2 text-[14px] font-bold text-white">
-            {selectedProduct.category}
-          </div>
-        </div>
+                    <div className="rounded-full bg-[#57C8C7] px-5 py-2 text-[14px] font-bold text-white">
+                        {selectedProduct.category}
+                    </div>
+                    </div>
 
-        {/* TITLE */}
-        <h2 className="whitespace-pre-line text-center text-[34px] font-black leading-[42px] text-[#D41A68] lg:text-right lg:text-[52px] lg:leading-[60px]">
-          {selectedProduct.title}
-        </h2>
+                    {/* TITLE */}
+                    <h2 className="whitespace-pre-line text-center text-[34px] font-black leading-[42px] text-[#D41A68] lg:text-right lg:text-[52px] lg:leading-[60px]">
+                    {selectedProduct.title}
+                    </h2>
 
-        {/* INFO */}
-        <p className="mt-6 whitespace-pre-line text-center text-[18px] leading-[34px] text-black lg:text-right">
-          {selectedProduct.info}
-        </p>
+                    {/* INFO */}
+                    <p className="mt-6 whitespace-pre-line text-center text-[18px] leading-[34px] text-black lg:text-right">
+                    {selectedProduct.info}
+                    </p>
 
-        {/* TAGS */}
-        <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
+                    {/* TAGS */}
+                    <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
 
-          {selectedProduct.tags.map((tag) => (
-            <div
-              key={tag}
-              className="rounded-full bg-[#D41A68] px-5 py-2 text-[15px] font-bold text-white"
-            >
-              {tag}
+                    {selectedProduct.tags.map((tag) => (
+                        <div
+                        key={tag}
+                        className="rounded-full bg-[#D41A68] px-5 py-2 text-[15px] font-bold text-white"
+                        >
+                        {tag}
+                        </div>
+                    ))}
+
+                    </div>
+
+                    {/* SKU */}
+                    <p className="mt-6 text-center text-[16px] font-bold text-black lg:text-right">
+                    מק”ט {selectedProduct.sku}
+                    </p>
+
+                    {/* BUTTON */}
+                    <button
+                    className="mx-auto mt-8 flex h-[55px] min-w-[220px] items-center justify-center rounded-full bg-[#D41A68] px-10 text-[22px] font-black text-white transition-all duration-300 hover:scale-105 lg:mx-0"
+                    >
+                    צור קשר להזמנה
+                    </button>
+
+                </div>
+                </div>
             </div>
-          ))}
-
-        </div>
-
-        {/* SKU */}
-        <p className="mt-6 text-center text-[16px] font-bold text-black lg:text-right">
-          מק”ט {selectedProduct.sku}
-        </p>
-
-        {/* BUTTON */}
-        <button
-          className="mx-auto mt-8 flex h-[55px] min-w-[220px] items-center justify-center rounded-full bg-[#D41A68] px-10 text-[22px] font-black text-white transition-all duration-300 hover:scale-105 lg:mx-0"
-        >
-          צור קשר להזמנה
-        </button>
-
-      </div>
-    </div>
-  </div>
-</div>
-  </div>
-)}
+            </div>
+            </div>
+            )}
     </main>
     // popup product
     
