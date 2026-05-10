@@ -684,34 +684,7 @@ export default function CatalogPage() {
                 {/* TOP */}
                 <div className="grid gap-10 lg:grid-cols-2">
 
-                {/* IMAGE SIDE */}
-                <div>
-
-                    {/* BRAND */}
-                    <div className="mb-6 flex justify-center lg:justify-start">
-
-                    <Image
-                        src={selectedProduct.brand_image}
-                        alt={selectedProduct.brand}
-                        width={220}
-                        height={80}
-                        className="h-auto w-auto max-h-[70px] object-contain"
-                    />
-                    </div>
-
-                    {/* PRODUCT IMAGE */}
-                    <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
-
-                    <Image
-                        src={selectedProduct.image}
-                        alt={selectedProduct.title}
-                        fill
-                        className="object-contain"
-                    />
-                    </div>
-                </div>
-
-                {/* CONTENT */}
+                     {/* CONTENT */}
                 <div className="flex flex-col justify-center">
 
                     {/* CATEGORY */}
@@ -759,6 +732,35 @@ export default function CatalogPage() {
                     </button>
 
                 </div>
+
+                {/* IMAGE SIDE */}
+                <div>
+
+                    {/* BRAND */}
+                    <div className="mb-6 flex justify-center lg:justify-start">
+
+                    <Image
+                        src={selectedProduct.brand_image}
+                        alt={selectedProduct.brand}
+                        width={220}
+                        height={80}
+                        className="h-auto w-auto max-h-[70px] object-contain"
+                    />
+                    </div>
+
+                    {/* PRODUCT IMAGE */}
+                    <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
+
+                    <Image
+                        src={selectedProduct.image}
+                        alt={selectedProduct.title}
+                        fill
+                        className="object-contain"
+                    />
+                    </div>
+                </div>
+
+               
                 </div>
             </div>
             </div>
