@@ -770,6 +770,3 @@ export default function CatalogPage() {
   
   
 }
-
-// product popop
-
