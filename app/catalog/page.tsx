@@ -8,13 +8,6 @@ import type { Category } from "@/types/categories";
 import type { Tag } from "@/types/tag";
 import type { Brand } from "@/types/brands";
 
-// import { products } from "@/data/products";
-// import { categories } from "@/data/categories";
-// import { brands } from "@/data/brands";
-// import { tags } from "@/data/tags";
-
-
-
 
 // filters
 const filters = [
@@ -42,7 +35,6 @@ const topFiltersBtn = [
 ];
 
 // ditery filter content
-
 const diteryFilterBtn = [
     "טבעוני",   
     "פרווה", 
@@ -59,6 +51,11 @@ const sortOptions = [
   "מותג",
   "שם (א-ת)",
 ];
+
+
+
+
+
 
 export default function CatalogPage() {
 
@@ -79,8 +76,6 @@ export default function CatalogPage() {
 
     // special filter of dropdown
     const [selectedCategory, setSelectedCategory] = useState("all");
-
-
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
@@ -657,12 +652,12 @@ export default function CatalogPage() {
                     מק”ט {product.sku}
                 </p>
                 {/* product buttom */}
-                <Link
-                    href={`/products/${product.slug}`}
+                <p
+                    // href={`/products/${product.slug}`}
                     className="cursor-pointer mx-auto mt-1 flex h-[40px] max-w-[161px] items-center justify-center rounded-full bg-[#D41A68] px-8 text-center text-[18px] font-black leading-[20px] text-white transition-all duration-200 hover:opacity-90"
                     >
                     צפה במוצר
-                </Link>
+                </p>
                     </div>
                 </div>
             ))}
