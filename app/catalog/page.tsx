@@ -58,7 +58,7 @@ const sortOptions = [
 // faqs
  const faqItems = [
     {
-     title: 'סימון בריאותי <span class="text-[16px] md:text-[22px] lg:text-[28px]">(אלרגנים)</span>',
+     title: 'סימון בריאותי <span class="text-[16px] md:text-[22px] font-medium lg:text-[28px]">(אלרגנים)</span>',
       content:
 
         "מידע על אלרגנים יופיע כאן בהמשך.",
@@ -76,7 +76,7 @@ const sortOptions = [
         "מידע נוסף יופיע כאן בהמשך.",
     },
     {
-      title: "ערכים תזונתיים 100 גרם",
+      title: ' ערכים תזונתיים <span class="text-[16px] font-medium md:text-[22px] lg:text-[28px]">100 גרם</span>',
       content:
 
         "ערכים תזונתיים יופיעו כאן בהמשך.",
