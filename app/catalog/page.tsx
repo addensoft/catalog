@@ -813,7 +813,7 @@ export default function CatalogPage() {
 
                                     <Image
                                         src={
-                                        selectedProduct?.barcode ||
+                                        // selectedProduct?.barcode ||
                                         "/barcode.png"
                                         }
                                         alt="barcode"
