@@ -959,14 +959,10 @@ export default function CatalogPage() {
                         </div>
 
                         {/* FOOTER */}
-                        <div className="mt-6 border-t-[4px] border-[#4CC7C7] pt-5 text-center">
+                        <div className="mt-6 border-t-[3px] border-[#4CC7C7] pt-5 text-center lg:w-[90%] mx-auto">
 
-                        <p className="text-[13px] leading-[24px] text-black md:text-[16px] md:leading-[30px]">
-                            הנתונים המדויקים מופיעים על גבי המוצר, אין להסתמך על
-                            הפירוט המופיע באתר, ייתכנו טעויות או אי התאמות.
-                            יש לקרוא את המופיע על גבי אריזת המוצר לפני השימוש.
-                            התמונות והתאריכים המופיעים הינם להמחשה בלבד ואין
-                            להסתמך עליהם.
+                        <p className="text-[24px] leading-[26px] font-light text-black md:text-[30px] md:leading-[33px] ">
+                           הנתונים המדויקים מופיעים על גבי המוצר, אין להסתמך על הפירוט המופיע באתר, יתכנו טעויות או אי התאמות, יש לקרוא את המופיע על גבי אריזת המוצר לפני השימוש. התמונות והתאריכים המופיעים הינם להמחשה בלבד ואין להסתמך עליהם.
                         </p>
                         </div>
                     </div>
