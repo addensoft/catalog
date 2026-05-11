@@ -11,4 +11,5 @@ export interface Product {
   brand: string;
   tags: string[];
   sku: string;
+  gallery_images:string[];
 }

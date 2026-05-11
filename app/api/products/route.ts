@@ -67,9 +67,16 @@ const products = await Promise.all(
 
       slug: item.slug,
 
+      // MAIN FEATURE IMAGE
       image:
         item.images?.[0]?.src ||
         "/placeholder.png",
+
+        // ALL GALLERY IMAGES
+        gallery_images:
+          item.images?.map(
+            (img: any) => img.src
+          ) || [],
 
       brand_image: brandImage,
 
@@ -81,7 +88,7 @@ const products = await Promise.all(
 
       info:
         item.short_description
-          ?.replace(/<[^>]*>/g, "") || "",
+          ?.replace(/<[^>]*>/g, "") ?.replace(/<br\s*\/?>/gi, "\n")  || "",
 
       tags:
         item.tags?.map(

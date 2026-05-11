@@ -9,6 +9,9 @@ import type { Tag } from "@/types/tag";
 import type { Brand } from "@/types/brands";
 
 
+
+
+
 // filters
 const filters = [
   "ממתקי ילדים",
@@ -52,6 +55,34 @@ const sortOptions = [
   "שם (א-ת)",
 ];
 
+// faqs
+ const faqItems = [
+    {
+     title: 'סימון בריאותי <span class="text-[16px] md:text-[22px] lg:text-[28px]">(אלרגנים)</span>',
+      content:
+
+        "מידע על אלרגנים יופיע כאן בהמשך.",
+    },
+    {
+      title: "רכיבים",
+      content:
+
+        "רכיבי המוצר יופיעו כאן בהמשך.",
+    },
+    {
+      title: "מכיל",
+      content:
+
+        "מידע נוסף יופיע כאן בהמשך.",
+    },
+    {
+      title: "ערכים תזונתיים 100 גרם",
+      content:
+
+        "ערכים תזונתיים יופיעו כאן בהמשך.",
+    },
+  ];
+  
 
 
 
@@ -79,6 +110,36 @@ export default function CatalogPage() {
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+
+
+
+    // faqs colasps
+    const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+
+//     const galleryImages =
+//   selectedProduct?.gallery?.length > 0
+//     ? selectedProduct.gallery
+//     : [
+//         "/products/product-1.png",
+//        "/products/product-2.png",
+//        "/products/product-3.png",
+//       ];
+    // AUTO SLIDE
+        const [activeImage, setActiveImage] = useState(0);
+        const galleryImages = selectedProduct?.gallery_images || [];
+
+        useEffect(() => {
+        if (galleryImages.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setActiveImage((prev) =>
+            prev === galleryImages.length - 1 ? 0 : prev + 1
+            );
+        }, 3000);
+
+        return () => clearInterval(interval);
+        }, [galleryImages.length]);
 
     
 
@@ -125,7 +186,7 @@ export default function CatalogPage() {
     setState([...selectedArray, value]);
   }
 
-};
+    };
 
         // all filters filters
       const filteredProducts = products.filter((product: Product) => {
@@ -666,103 +727,250 @@ export default function CatalogPage() {
 
         {/* products popup */}
         {selectedProduct && (
-            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 p-4">
+            <div className="fixed inset-0 z-[9999] bg-black/70 p-2 md:p-5">
 
-            <div className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[40px] bg-[#F5CA5F] p-[6px]">
+            {/* SCROLL WRAPPER */}
+            <div className="flex h-full items-start justify-center overflow-y-auto">
 
-            {/* INNER */}
-            <div className="relative rounded-[36px] bg-white px-6 pb-10 pt-14 lg:px-14">
+                {/* POPUP */}
+                <div className="my-4 flex w-full max-w-[1260px] flex-col overflow-hidden rounded-[24px] bg-[#F7F7F7] shadow-2xl max-h-[95vh]">
 
-                {/* CLOSE */}
-                <button
-                onClick={() => setSelectedProduct(null)}
-                className="absolute left-4 top-4 z-20 flex h-[45px] w-[45px] items-center justify-center rounded-full bg-[#D41A68] text-[24px] font-bold text-white transition-all duration-300 hover:rotate-90"
-                >
-                ×
-                </button>
+                {/* HEADER */}
+                <div className="sticky top-0 z-50 bg-[#45C3C3] px-5 pb-4 pt-5 text-right text-white md:px-8">
 
-                {/* TOP */}
-                <div className="grid gap-10 lg:grid-cols-2">
-
-                     {/* CONTENT */}
-                <div className="flex flex-col justify-center">
-
-                    {/* CATEGORY */}
-                    <div className="mb-4 flex justify-center lg:justify-start">
-
-                    <div className="rounded-full bg-[#57C8C7] px-5 py-2 text-[14px] font-bold text-white">
-                        {selectedProduct.category}
-                    </div>
-                    </div>
-
-                    {/* TITLE */}
-                    <h2 className="whitespace-pre-line text-center text-[34px] font-black leading-[42px] text-[#D41A68] lg:text-right lg:text-[52px] lg:leading-[60px]">
-                    {selectedProduct.title}
-                    </h2>
-
-                    {/* INFO */}
-                    <p className="mt-6 whitespace-pre-line text-center text-[18px] leading-[34px] text-black lg:text-right">
-                    {selectedProduct.info}
-                    </p>
-
-                    {/* TAGS */}
-                    <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
-
-                    {selectedProduct.tags.map((tag) => (
-                        <div
-                        key={tag}
-                        className="rounded-full bg-[#D41A68] px-5 py-2 text-[15px] font-bold text-white"
-                        >
-                        {tag}
-                        </div>
-                    ))}
-
-                    </div>
-
-                    {/* SKU */}
-                    <p className="mt-6 text-center text-[16px] font-bold text-black lg:text-right">
-                    מק”ט {selectedProduct.sku}
-                    </p>
-
-                    {/* BUTTON */}
+                    {/* CLOSE */}
                     <button
-                    className="mx-auto mt-8 flex h-[55px] min-w-[220px] items-center justify-center rounded-full bg-[#D41A68] px-10 text-[22px] font-black text-white transition-all duration-300 hover:scale-105 lg:mx-0"
+                    onClick={() => setSelectedProduct(null)}
+                    className="absolute left-3 top-3 z-50 flex h-[45px] w-[45px] items-center justify-center text-white transition-all duration-300 hover:rotate-90"
                     >
-                    צור קשר להזמנה
+                    <span className="text-[52px] leading-none">×</span>
                     </button>
 
+                    <h2 className="pr-12 text-[24px] font-bold leading-[16px] text-black md:text-[42px] md:leading-[46px]">
+                    {selectedProduct?.title ||
+                        "מתתק בטעמי תות שדה ואוכמניות"}
+                    </h2>
+
+                    <p className="mt-2 pr-12 text-[22px] font-medium leading-[28px] md:text-[33px]">
+                    {/* {selectedProduct?.weight || "700 גרם"} |{" "} */}
+                    
+                    {selectedProduct?.brand || "YAMMS"}
+                    </p>
                 </div>
 
-                {/* IMAGE SIDE */}
-                <div>
+                    {/* BODY */}
+                    <div className="overflow-y-auto p-3 md:p-5">
 
-                    {/* BRAND */}
-                    <div className="mb-6 flex justify-center lg:justify-start">
+                        {/* TOP SECTION */}
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-[60%_38%]">
 
-                    <Image
-                        src={selectedProduct.brand_image}
-                        alt={selectedProduct.brand}
-                        width={220}
-                        height={80}
-                        className="h-auto w-auto max-h-[70px] object-contain"
-                    />
+                        {/* CONTENT SIDE - RIGHT */}
+                        <div className="order-2 md:order-1 min-w-0 border border-[#D41A68] bg-white px-4 pl-20 text-right">
+
+                            {/* BRAND */}
+                            <div className="border-b-[2px]  border-[#46BAB9] pb-2">
+
+                            <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                מותג
+                            </p>
+
+                            <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                {selectedProduct?.brand || "SCREAMERS"}
+                            </p>
+                            </div>
+
+                            {/* Info */}
+                            <div className="border-b-[2px] border-[#46BAB9] py-2">
+
+                            <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                    גרם ואיזו
+                                </p>
+
+                           <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                {selectedProduct?.info ||
+                                '14 גרם יח׳ 50 במארז | משקל כולל 700 גרם'}
+                            </p>
+                            </div>
+
+                            {/* SKU */}
+                            <div className="border-b-[2px]  border-[#46BAB9] py-2">
+
+                                <div className="flex items-start justify-between gap-4">
+
+                                    <div className="text-right">
+
+                                    <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                        מק״ט
+                                    </p>
+
+                                    <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                        {selectedProduct?.sku ||
+                                        "000000000000"}
+                                    </p>
+                                    </div>
+
+                                    <div className="shrink-0 pt-2">
+
+                                    <Image
+                                        src={
+                                        selectedProduct?.barcode ||
+                                        "/barcode.png"
+                                        }
+                                        alt="barcode"
+                                        width={140}
+                                        height={50}
+                                        className="h-auto object-contain"
+                                    />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* KOSHER */}
+                            <div className="border-b-[2px] border-[#46BAB9] py-2">
+                                <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                    כשרות
+                                </p>
+
+                                <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                    {selectedProduct?.tags ||
+                                    'בד״צ בית יוסף בד״צ בעלזא "כשר פרווה'}
+                                </p>
+                            </div>
+
+                            {/* COUNTRY */}
+                            <div className="border-b-[2px] border-[#46BAB9] py-2 mb-6">
+
+                                <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                    ארץ ייצור
+                                </p>
+
+                                {/* <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                    {selectedProduct?.country || "סין"}
+                                </p> */}
+                            </div>
+                        </div>
+
+                       {/* IMAGE SIDE - LEFT */}
+                       <div className="order-1 md:order-2 min-w-0 border border-[#D41A68] relative bg-white p-4">  
+                        {/* BRAND LOGO */}  
+                        <div className="mb-4 abslute left-0 top-0 flex justify-end">    
+                            <Image      
+                            src={
+                                selectedProduct?.brand_image || 
+                                "/logo.png"      
+                                }      
+                                alt="brand"      
+                                width={300}      
+                                height={120}      
+                                className="h-auto max-h-[70px] w-auto object-contain"    
+                                />  
+                                </div>  
+                                {/* PRODUCT IMAGE */}  
+                                <div className="relative mx-auto h-[260px] w-full max-w-[340px] overflow-hidden md:h-[380px]">    
+                                    {galleryImages.map((img: string, index: number) => ( 
+                                             <Image       
+                                              key={index}       
+                                            src={img}        
+                                            alt={`gallery-${index}`}        
+                                            fill   
+                                            unoptimized     
+                                            className={`absolute inset-0 object-contain transition-all duration-700 ${          
+                                                activeImage === index            
+                                                ? "opacity-100 scale-100"            
+                                                : "opacity-0 scale-95"        
+                                                }`}      
+                                                />    
+                                                ))}  
+                                                </div>  
+                                                {/* DOTS */}  
+                                                <div className="mt-5 flex justify-center gap-4">   
+                                                     {galleryImages.map((_: any, index: number) => (     
+                                                         <button        
+                                                         key={index}        
+                                                         onClick={() => setActiveImage(index)}        
+                                                         className={`h-5 w-5 rounded-full border-2 border-[#EC1974] transition-all duration-300 ${          
+                                                            activeImage === index            
+                                                            ? "bg-[#EC1974] scale-110"            
+                                                            : "bg-white"        
+                                                            }`}      
+                                                            />   
+                                                             ))}  
+                                                             </div>
+                                                             </div>
+
+                        </div>
+
+                        {/* FAQ */}
+                        <div className="mt-4 space-y-3" dir="rtl">
+                        {faqItems.map((item, index) => {
+                            const isOpen = openFaq === index;
+
+                            return (
+                            <div
+                                key={index}
+                                className="overflow-hidden"
+                            >
+                                <button
+                                type="button"
+                                onClick={() =>
+                                    setOpenFaq(isOpen ? null : index)
+                                }
+                                className="flex gap-2 w-full items-center justify-start bg-gradient-to-r from-[#4CC7C7] to-[#ffffff] px-2 py-5 text-right"
+                                >
+                                     <svg
+                                    className={`h-9 w-9 shrink-0 text-[#D41A68] transition-all duration-500 ease-in-out ${
+                                    isOpen ? "rotate-180" : ""
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="3"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M19 9l-7 7-7-7"
+                                    />
+                                </svg>
+
+                               <h2
+                                className="text-right text-[20px] font-bold leading-none text-[#D41A68] md:text-[30px] lg:leading-[20px] lg:text-[43px]"
+                                    dangerouslySetInnerHTML={{
+                                        __html: item.title,
+                                    }}
+                                    />
+                               
+                                </button>
+
+                                <div
+                                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                                    isOpen
+                                    ? "max-h-[400px] opacity-100"
+                                    : "max-h-0 opacity-0"
+                                }`}
+                                >
+                                <div className="bg-white px-5 py-5 text-right text-[16px] leading-[30px] text-black md:text-[18px] md:leading-[34px]">
+                                    {item.content}
+                                </div>
+                                </div>
+                            </div>
+                            );
+                        })}
+                        </div>
+
+                        {/* FOOTER */}
+                        <div className="mt-6 border-t-[4px] border-[#4CC7C7] pt-5 text-center">
+
+                        <p className="text-[13px] leading-[24px] text-black md:text-[16px] md:leading-[30px]">
+                            הנתונים המדויקים מופיעים על גבי המוצר, אין להסתמך על
+                            הפירוט המופיע באתר, ייתכנו טעויות או אי התאמות.
+                            יש לקרוא את המופיע על גבי אריזת המוצר לפני השימוש.
+                            התמונות והתאריכים המופיעים הינם להמחשה בלבד ואין
+                            להסתמך עליהם.
+                        </p>
+                        </div>
                     </div>
-
-                    {/* PRODUCT IMAGE */}
-                    <div className="relative mx-auto h-[320px] w-full max-w-[420px] lg:h-[500px] lg:max-w-[520px]">
-
-                    <Image
-                        src={selectedProduct.image}
-                        alt={selectedProduct.title}
-                        fill
-                        className="object-contain"
-                    />
-                    </div>
                 </div>
-
-               
-                </div>
-            </div>
             </div>
             </div>
             )}
