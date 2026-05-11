@@ -733,7 +733,7 @@ export default function CatalogPage() {
             <div className="flex h-full items-start justify-center overflow-y-auto">
 
                 {/* POPUP */}
-                <div className="my-4 flex w-full max-w-[1260px] flex-col overflow-hidden rounded-[24px] bg-[#F7F7F7] shadow-2xl max-h-[95vh]">
+                <div className="my-4 flex w-full max-w-[1260px] flex-col overflow-hidden rounded-[24px] bg-[#F7F7F7] shadow-2xl max-h-[90vh]">
 
                 {/* HEADER */}
                 <div className="sticky top-0 z-50 bg-[#45C3C3] px-5 pb-4 pt-5 text-right text-white md:px-8">
