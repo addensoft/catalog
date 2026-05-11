@@ -463,7 +463,7 @@ export default function CatalogPage() {
                     {/* LEFT BRAND */}
                     <div className="flex justify-center mb-[10px] lg:block">
                         <div className="w-[150px] lg:w-[220px] h-[72px] flex justify-end items-end lg:justify-end lg:items-center">
-                            <a href="#">
+                            <a href="/">
                                 <Image
                                 src="/leftsidelogo.webp"
                                 alt="left logo"
@@ -746,12 +746,12 @@ export default function CatalogPage() {
                     <span className="text-[52px] leading-none">×</span>
                     </button>
 
-                    <h2 className="pr-12 text-[24px] font-bold leading-[16px] text-black md:text-[42px] md:leading-[46px]">
+                    <h2 className="pl-8 text-[15px] font-bold leading-[18px] text-black md:text-[42px] md:leading-[46px]">
                     {selectedProduct?.title ||
                         "מתתק בטעמי תות שדה ואוכמניות"}
                     </h2>
 
-                    <p className="mt-2 pr-12 text-[22px] font-medium leading-[28px] md:text-[33px]">
+                    <p className="mt-2 pl-12 text-[16px] font-medium leading-[22px] md:text-[33px]">
                     {/* {selectedProduct?.weight || "700 גרם"} |{" "} */}
                     
                     {selectedProduct?.brand || "YAMMS"}
@@ -765,7 +765,7 @@ export default function CatalogPage() {
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-[60%_38%]">
 
                         {/* CONTENT SIDE - RIGHT */}
-                        <div className="order-2 md:order-1 min-w-0 border border-[#D41A68] bg-white px-4 pl-20 text-right">
+                        <div className="order-2 md:order-1 min-w-0 border border-[#D41A68] bg-white px-4 lg:pl-20 text-right">
 
                             {/* BRAND */}
                             <div className="border-b-[2px]  border-[#46BAB9] pb-2">
