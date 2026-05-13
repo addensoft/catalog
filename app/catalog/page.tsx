@@ -110,21 +110,12 @@ export default function CatalogPage() {
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
-
+    const [settings, setSettings] = useState<any>(null);
 
 
     // faqs colasps
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-
-//     const galleryImages =
-//   selectedProduct?.gallery?.length > 0
-//     ? selectedProduct.gallery
-//     : [
-//         "/products/product-1.png",
-//        "/products/product-2.png",
-//        "/products/product-3.png",
-//       ];
     // AUTO SLIDE
         const [activeImage, setActiveImage] = useState(0);
         const galleryImages = selectedProduct?.gallery_images || [];
@@ -142,7 +133,7 @@ export default function CatalogPage() {
         }, [galleryImages.length]);
 
     
-
+        // fetch products
     useEffect(() => {
 
         const fetchData = async () => {
@@ -167,6 +158,26 @@ export default function CatalogPage() {
         fetchData();
 
         }, []);
+
+    // Fetch options
+  
+
+        useEffect(() => {
+
+        const fetchSettings = async () => {
+
+            const settingsRes = await fetch("/api/settings");
+
+            const settingsData = await settingsRes.json();
+
+            setSettings(settingsData);
+
+        };
+
+        fetchSettings();
+
+        }, []);
+
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -480,7 +491,10 @@ export default function CatalogPage() {
             </header>
 
             {/* CATEGORY BAR */}
-            <section className="relative z-2 bg-[#D41A68] px-6 py-[17px] rounded-b-[6px]">
+            <section style={{
+  backgroundColor:
+    settings?.category_nav_bg_color,
+}} className="relative z-2  px-6 py-[17px] rounded-b-[6px]">
                <div className="mx-auto flex gap-3 overflow-x-auto pb-2 lg:grid lg:max-w-[1360px] lg:grid-cols-7 lg:gap-[18px]">
 
                     {categories.map((item, index) => {
@@ -534,7 +548,12 @@ export default function CatalogPage() {
         </section>
 
         {/* Body aria */}
-        <section className="px-10 py-12 pt-[16px] bg-[#F5CA5F]">
+        <section className="px-10 py-12 pt-[16px] bg-[#F5CA5F]"
+        style={{
+  backgroundColor:
+    settings?.catalog_bg_color,
+}} 
+        >
 
             {/* Shorts options */}
             <div className="relative mx-auto max-w-[1200px] mb-[60px] flex justify-end">
@@ -812,9 +831,11 @@ export default function CatalogPage() {
                                     <div className="shrink-0 pt-2">
 
                                     <Image
-                                        src={
-                                        // selectedProduct?.barcode ||
-                                        "/barcode.png"
+                                          src={
+                                            selectedProduct?.product_barcode &&
+                                            selectedProduct.product_barcode.trim() !== ""
+                                            ? selectedProduct.product_barcode
+                                            : "/barcode.png"
                                         }
                                         alt="barcode"
                                         width={140}
@@ -844,9 +865,9 @@ export default function CatalogPage() {
                                     ארץ ייצור
                                 </p>
 
-                                {/* <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
-                                    {selectedProduct?.country || "סין"}
-                                </p> */}
+                                <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                    {selectedProduct?.product_import_country || "סין"}
+                                </p>
                             </div>
                         </div>
 

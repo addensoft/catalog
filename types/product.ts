@@ -12,4 +12,8 @@ export interface Product {
   tags: string[];
   sku: string;
   gallery_images:string[];
+
+  product_barcode: string;
+  product_import_country: string;
+  products_faqs:string[];
 }

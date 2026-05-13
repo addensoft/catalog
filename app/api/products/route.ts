@@ -58,6 +58,26 @@ const products = await Promise.all(
         "/brands/default.png";
     }
 
+    // barcode image fetching from api
+        const barcodeImageId = item.meta_data.find(
+          (meta: any) => meta.key === "product_barcode"
+        )?.value;
+
+        let productBarcode = "/barcode/default.png";
+
+        if (barcodeImageId) {
+
+          const barcodeRes = await fetch(
+            `https://addensoft.com/wp-json/wp/v2/media/${barcodeImageId}`
+          );
+
+          const barcodeData = await barcodeRes.json();
+
+          productBarcode =
+            barcodeData.source_url ||
+            "/barcode/default.png";
+        }
+
     return {
       id: item.id,
 
@@ -96,6 +116,15 @@ const products = await Promise.all(
         ) || [],
 
       sku: item.sku,
+
+      product_barcode: productBarcode,
+
+      product_import_country:
+    item.meta_data.find(
+      (meta: any) =>
+        meta.key === "product_import_country_"
+    )?.value || "",
+
     };
   })
 );
