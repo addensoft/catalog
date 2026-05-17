@@ -8,6 +8,12 @@ import type { Category } from "@/types/categories";
 import type { Tag } from "@/types/tag";
 import type { Brand } from "@/types/brands";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+
+import "swiper/css";
+
+
 
 
 
@@ -112,6 +118,10 @@ export default function CatalogPage() {
     const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
     const [settings, setSettings] = useState<any>(null);
 
+    // on scroll show next 20 products
+    const [visibleCount, setVisibleCount] = useState(10);
+    const [loadingMore, setLoadingMore] = useState(false);
+
 
     // faqs colasps
     const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -134,30 +144,31 @@ export default function CatalogPage() {
 
     
         // fetch products
-    useEffect(() => {
+        
+        useEffect(() => {
 
-        const fetchData = async () => {
+            const fetchData = async () => {
 
-            const productsRes = await fetch("/api/products");
-            const productsData = await productsRes.json();
-            setProducts(productsData);
+                const productsRes = await fetch("/api/products");
+                const productsData = await productsRes.json();
+                setProducts(productsData);
 
-            const categoriesRes = await fetch("/api/categories");
-            const categoriesData = await categoriesRes.json();
-            setCategories(categoriesData);
+                const categoriesRes = await fetch("/api/categories");
+                const categoriesData = await categoriesRes.json();
+                setCategories(categoriesData);
 
-            const brandsRes = await fetch("/api/brands");
-            const brandsData = await brandsRes.json();
-            setBrands(brandsData);
+                const brandsRes = await fetch("/api/brands");
+                const brandsData = await brandsRes.json();
+                setBrands(brandsData);
 
-            const tagsRes = await fetch("/api/tags");
-            const tagsData = await tagsRes.json();
-            setTags(tagsData);
-        };
+                const tagsRes = await fetch("/api/tags");
+                const tagsData = await tagsRes.json();
+                setTags(tagsData);
+            };
 
-        fetchData();
+            fetchData();
 
-        }, []);
+            }, []);
 
     // Fetch options
   
@@ -224,6 +235,76 @@ export default function CatalogPage() {
             tagsMatch
         );
         });
+
+        // load more products 
+        const displayedProducts = filteredProducts.slice(
+            0,
+            visibleCount
+        );
+        useEffect(() => {
+        setVisibleCount(10);
+            }, [
+            selected,
+            selectedBrands,
+            selectedTags,
+        ]);
+        useEffect(() => {
+
+        const handleScroll = () => {
+
+            if (loadingMore) return;
+
+            const scrollTop = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const fullHeight =
+            document.documentElement.scrollHeight;
+
+            if (
+            scrollTop + windowHeight >=
+            fullHeight - 300
+            ) {
+
+            if (
+                visibleCount < filteredProducts.length
+            ) {
+
+                setLoadingMore(true);
+
+                setTimeout(() => {
+
+                setVisibleCount((prev) =>
+                    Math.min(
+                    prev + 10,
+                    filteredProducts.length
+                    )
+                );
+
+                setLoadingMore(false);
+
+                }, 300);
+
+            }
+            }
+        };
+
+        window.addEventListener(
+            "scroll",
+            handleScroll
+        );
+
+        return () =>
+            window.removeEventListener(
+            "scroll",
+            handleScroll
+            );
+
+        }, [
+        visibleCount,
+        filteredProducts.length,
+        loadingMore,
+        ]);
+
+
 
   return (
     <main dir="rtl" className="min-h-screen bg-[#F5CA5F]">
@@ -491,71 +572,101 @@ export default function CatalogPage() {
             </header>
 
             {/* CATEGORY BAR */}
-            <section style={{
-  backgroundColor:
-    settings?.category_nav_bg_color,
-}} className="relative z-2  px-6 py-[17px] rounded-b-[6px]">
-               <div className="mx-auto flex gap-3 overflow-x-auto pb-2 lg:grid lg:max-w-[1360px] lg:grid-cols-7 lg:gap-[18px]">
-
-                    {categories.map((item, index) => {
-
-                    const count = products.filter(
-                        (product) => product.category === item.title
-                    ).length;
-
-                    const isActive = selected === item.title;
-
-                    return (
-                        <button
-                        key={index}
-                        onClick={() =>
-                            setSelected(
-                                selected === item.title
-                                ? "בחירה"
-                                : item.title
-                            )
-                         }
-                        className={`min-w-[31%] shrink-0 rounded-xl px-2 py-3 lg:min-w-0 lg:px-3 lg:py-2 rounded-xl px-2 py-3 lg:px-3 lg:py-2 text-center shadow-sm transition-all duration-200 cursor-pointer ${
-                            isActive
-                            ? "bg-[#46BAB9]"
-                            : "bg-[#f5f5f5] hover:bg-[#46BAB9]"
-                        }`}
+            <section
+                    style={{
+                        backgroundColor: settings?.category_nav_bg_color,
+                    }}
+                    className="relative z-2 px-6 py-[17px] rounded-b-[6px]"
+                    >
+                    <div className="mx-auto max-w-[1360px]">
+                        
+                        <Swiper
+                        modules={[Autoplay]}
+                        spaceBetween={18}
+                        loop={false}
+                        speed={800}
+                        autoplay={{
+                            delay: 6000,
+                            disableOnInteraction: false,
+                        }}
+                        breakpoints={{
+                            0: {
+                            slidesPerView: 3,
+                            slidesPerGroup: 3,
+                            spaceBetween: 12,
+                            },
+                            768: {
+                            slidesPerView: 5,
+                            slidesPerGroup: 5,
+                            spaceBetween: 16,
+                            },
+                            1024: {
+                            slidesPerView: 7,
+                            slidesPerGroup: 3,
+                            spaceBetween: 18,
+                            },
+                        }}
                         >
-                        <h3
-                    className={`text-[12px] lg:text-[17px] leading-[16px] font-bold transition-colors duration-200 ${
-                    isActive
-                        ? "text-white"
-                        : "text-black group-hover:text-white"
-                    }`}
-                >
-                    {item.title}
-                </h3>
+                        {categories.map((item, index) => {
+                            const count = products.filter(
+                            (product) => product.category === item.title
+                            ).length;
 
-                        <div
-                    className={`mx-auto mt-1 flex h-[19px] w-[35px] items-center justify-center rounded-full text-[13px] leading-[16px] font-bold transition-all duration-200 ${
-                    isActive
-                        ? "bg-white text-[#46BAB9]"
-                        : "bg-[#D41A68] text-white group-hover:bg-white group-hover:text-[#D41A68]"
-                    }`}
-                >
-                    {count}
-                </div>
-                        </button>
-                    );
-                    })}
-                </div>
+                            const isActive = selected === item.title;
+
+                            return (
+                            <SwiperSlide key={index}>
+                                <button
+                                onClick={() =>
+                                    setSelected(
+                                    selected === item.title
+                                        ? "בחירה"
+                                        : item.title
+                                    )
+                                }
+                                className={`w-full rounded-xl px-2 py-3 lg:px-3 lg:py-2 text-center shadow-sm transition-all duration-200 cursor-pointer ${
+                                    isActive
+                                    ? "bg-[#46BAB9]"
+                                    : "bg-[#f5f5f5] hover:bg-[#46BAB9]"
+                                }`}
+                                >
+                                <h3
+                                    className={`text-[12px] lg:text-[17px] leading-[16px] font-bold transition-colors duration-200 ${
+                                    isActive
+                                        ? "text-white"
+                                        : "text-black hover:text-white"
+                                    }`}
+                                >
+                                    {item.title}
+                                </h3>
+
+                                <div
+                                    className={`mx-auto mt-1 flex h-[19px] w-[35px] items-center justify-center rounded-full text-[13px] leading-[16px] font-bold transition-all duration-200 ${
+                                    isActive
+                                        ? "bg-white text-[#46BAB9]"
+                                        : "bg-[#D41A68] text-white hover:bg-white hover:text-[#D41A68]"
+                                    }`}
+                                >
+                                    {count}
+                                </div>
+                                </button>
+                            </SwiperSlide>
+                            );
+                        })}
+                        </Swiper>
+
+                    </div>
             </section>
         </section>
 
         {/* Body aria */}
         <section className="px-10 py-12 pt-[16px] bg-[#F5CA5F]"
         style={{
-  backgroundColor:
-    settings?.catalog_bg_color,
-}} 
+            backgroundColor:
+            settings?.catalog_bg_color,
+        }} 
         >
-
-            {/* Shorts options */}
+            {/* products filter range, price, order etc */}
             <div className="relative mx-auto max-w-[1200px] mb-[60px] flex justify-end">
 
                 <button
@@ -653,7 +764,7 @@ export default function CatalogPage() {
              {/* products loop */}
             <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[96px] md:grid-cols-2 xl:grid-cols-3">
 
-            {filteredProducts.map((product) => (
+            {displayedProducts.map((product) => (
 
                 <div key={product.id} 
                 onClick={() => setSelectedProduct(product)}
@@ -724,7 +835,7 @@ export default function CatalogPage() {
                 </p>
                 </div>
                 <p className="mt-2 text-center text-[12px] leading-[22px] font-medium text-black">
-                {   product.tags.join(" | ")}
+                {   product.tags}
                 </p>
 
                 {/* product sku */}
@@ -771,9 +882,9 @@ export default function CatalogPage() {
                     </h2>
 
                     <p className="mt-2 pl-12 text-[16px] font-medium leading-[22px] md:text-[33px]">
-                    {/* {selectedProduct?.weight || "700 גרם"} |{" "} */}
+                    {selectedProduct?.size_unit} {selectedProduct?.size_value} |{" "}
                     
-                    {selectedProduct?.brand || "YAMMS"}
+                    {selectedProduct?.brand}
                     </p>
                 </div>
 
@@ -852,9 +963,8 @@ export default function CatalogPage() {
                                     כשרות
                                 </p>
 
-                                <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
-                                    {selectedProduct?.tags ||
-                                    'בד״צ בית יוסף בד״צ בעלזא "כשר פרווה'}
+                                <p className="mt-1 break-words text-[22px] whitespace-pre-line leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                    {selectedProduct?.kesheria_single}
                                 </p>
                             </div>
 

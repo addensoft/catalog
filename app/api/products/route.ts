@@ -16,117 +16,198 @@
 
 
 export async function GET() {
-  
 
-  const res = await fetch(
-    "https://addensoft.com/wp-json/wc/v3/products",
-    {
-      headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(
-            process.env.WC_KEY +
-            ":" +
-            process.env.WC_SECRET
-          ).toString("base64"),
-      },
-      cache: "no-store",
-    }
-  );
+  let allProducts: any[] = [];
+  let page = 1;
+  let hasMore = true;
 
-  const data = await res.json();
+  while (hasMore) {
 
-const products = await Promise.all(
-  data.map(async (item: any) => {
+    const res = await fetch(
+      `https://addensoft.com/wp-json/wc/v3/products?per_page=100&page=${page}`,
+      {
+        headers: {
+          Authorization:
+            "Basic " +
+            Buffer.from(
+              process.env.WC_KEY +
+              ":" +
+              process.env.WC_SECRET
+            ).toString("base64"),
+        },
+        cache: "no-store",
+      }
+    );
 
-    const brandImageId = item.meta_data.find(
-      (meta: any) => meta.key === "brand_image"
-    )?.value;
+    const data = await res.json();
 
-    let brandImage = "/brands/default.png";
-
-    if (brandImageId) {
-
-      const mediaRes = await fetch(
-        `https://addensoft.com/wp-json/wp/v2/media/${brandImageId}`
-      );
-
-      const mediaData = await mediaRes.json();
-
-      brandImage =
-        mediaData.source_url ||
-        "/brands/default.png";
+    if (data.length === 0) {
+      hasMore = false;
+      break;
     }
 
-    // barcode image fetching from api
-        const barcodeImageId = item.meta_data.find(
-          (meta: any) => meta.key === "product_barcode"
-        )?.value;
+    allProducts = [...allProducts, ...data];
 
-        let productBarcode = "/barcode/default.png";
+    page++;
+  }
 
-        if (barcodeImageId) {
+  const products = await Promise.all(
+    allProducts.map(async (item: any) => {
 
-          const barcodeRes = await fetch(
-            `https://addensoft.com/wp-json/wp/v2/media/${barcodeImageId}`
+    // brand thumbnail
+    const brand = item.brands?.[0];
+
+      let brandThumbnail = "/brands/default.png";
+
+      if (brand?.id) {
+
+        try {
+
+          const brandRes = await fetch(
+            `https://addensoft.com/wp-json/wc/v3/products/brands/${brand.id}`,
+            {
+              headers: {
+                Authorization:
+                  "Basic " +
+                  Buffer.from(
+                    process.env.WC_KEY +
+                    ":" +
+                    process.env.WC_SECRET
+                  ).toString("base64"),
+              },
+              cache: "no-store",
+            }
           );
 
-          const barcodeData = await barcodeRes.json();
+          const brandData = await brandRes.json();
 
-          productBarcode =
-            barcodeData.source_url ||
-            "/barcode/default.png";
+          brandThumbnail =
+            brandData.image?.src ||
+            "/brands/default.png";
+
+        } catch (error) {
+
+          console.log(
+            "Brand image fetch error:",
+            error
+          );
         }
+      }
 
-    return {
-      id: item.id,
+      const barcodeImageId = item.meta_data.find(
+        (meta: any) => meta.key === "product_barcode"
+      )?.value;
 
-      title: item.name
-      ?.replace(/\\n/g, "\n")
-      ?.replace(/<br\s*\/?>/gi, "\n") || "",
+      let productBarcode = "/barcode/default.png";
 
-      slug: item.slug,
+      if (barcodeImageId) {
 
-      // MAIN FEATURE IMAGE
-      image:
-        item.images?.[0]?.src ||
-        "/placeholder.png",
+        const barcodeRes = await fetch(
+          `https://addensoft.com/wp-json/wp/v2/media/${barcodeImageId}`
+        );
 
-        // ALL GALLERY IMAGES
+        const barcodeData = await barcodeRes.json();
+
+        productBarcode =
+          barcodeData.source_url ||
+          "/barcode/default.png";
+      }
+      // size manuall maping
+      const sizeUnitValue =
+        item.meta_data.find(
+          (meta: any) =>
+            meta.key === "size_unit"
+        )?.value || "";
+
+      const sizeUnitMap: any = {
+        gram: "גרם",
+        ml: 'מ"ל',
+        kg: 'ק"ג',
+      };
+
+      const sizeUnit =
+        sizeUnitMap[sizeUnitValue] ||
+        sizeUnitValue;
+
+      return {
+        
+
+        id: item.id,
+
+        title:
+          item.name
+            ?.replace(/\\n/g, "\n")
+            ?.replace(/<br\s*\/?>/gi, "\n") || "",
+
+        slug: item.slug,
+
+        image:
+          item.images?.[0]?.src ||
+          "/placeholder.png",
+
         gallery_images:
           item.images?.map(
             (img: any) => img.src
           ) || [],
 
-      brand_image: brandImage,
+        brand_image: brandThumbnail,
 
-      category:
-        item.categories?.[0]?.name || "",
+        category:
+          item.categories?.[0]?.name || "",
 
-      brand:
-        item.brands?.[0]?.name || "",
+        brand:
+          item.brands?.[0]?.name || "",
 
-      info:
-        item.short_description
-          ?.replace(/<[^>]*>/g, "") ?.replace(/<br\s*\/?>/gi, "\n")  || "",
+        info:
+          // item.short_description
+          //   ?.replace(/<[^>]*>/g, "")
+          //   ?.replace(/<br\s*\/?>/gi, "\n") || "",
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "factor_of_friction"
+          )?.value || "",
 
-      tags:
-        item.tags?.map(
-          (tag: any) => tag.name
-        ) || [],
+        tags:
+          // item.tags?.map(
+          //   (tag: any) => tag.name
+          // ) || [],
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "kashrut_כַּשְׁרוּת_for_shop"
+          )?.value || "",
 
-      sku: item.sku,
+          kesheria_single:
+             item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "kashrut"
+          )?.value || "",
 
-      product_barcode: productBarcode,
+        size_value:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "size_value"
+          )?.value || "",
 
-      product_import_country:
-    item.meta_data.find(
-      (meta: any) =>
-        meta.key === "product_import_country_"
-    )?.value || "",
+        size_unit: sizeUnit,
 
-    };
-  })
-);
+        sku: item.sku,
+
+        product_barcode: productBarcode,
+
+        product_import_country:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "country_of_manufacture"
+          )?.value || "",
+
+      };
+    })
+  );
+
   return Response.json(products);
 }
