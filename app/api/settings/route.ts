@@ -3,7 +3,7 @@
 export async function GET() {
 
   const res = await fetch(
-    "https://addensoft.com/wp-json/custom/v1/site-settings"
+    "https://sienna-duck-658240.hostingersite.com/wp-json/custom/v1/site-settings"
   );
 
   const settings = await res.json();

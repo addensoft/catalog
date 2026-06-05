@@ -24,7 +24,7 @@ export async function GET() {
   while (hasMore) {
 
     const res = await fetch(
-      `https://addensoft.com/wp-json/wc/v3/products?per_page=100&page=${page}`,
+      `https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products?per_page=100&page=${page}`,
       {
         headers: {
           Authorization:
@@ -153,7 +153,9 @@ export async function GET() {
         brand_image: brandThumbnail,
 
         category:
-          item.categories?.[0]?.name || "",
+        item.categories?.map(
+          (cat: any) => cat.name
+        ) || [],
 
         brand:
           item.brands?.[0]?.name || "",

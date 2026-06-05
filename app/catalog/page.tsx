@@ -171,8 +171,6 @@ export default function CatalogPage() {
             }, []);
 
     // Fetch options
-  
-
         useEffect(() => {
 
         const fetchSettings = async () => {
@@ -197,25 +195,25 @@ export default function CatalogPage() {
 
     // filter toggle 
     const toggleFilter = (
-  value: string,
-  selectedArray: string[],
-  setState: React.Dispatch<React.SetStateAction<string[]>>
-) => {
+        value: string,
+        selectedArray: string[],
+        setState: React.Dispatch<React.SetStateAction<string[]>>
+        ) => {
 
-  if (selectedArray.includes(value)) {
-    setState(selectedArray.filter((item) => item !== value));
-  } else {
-    setState([...selectedArray, value]);
-  }
+        if (selectedArray.includes(value)) {
+            setState(selectedArray.filter((item) => item !== value));
+        } else {
+            setState([...selectedArray, value]);
+        }
 
-    };
+            };
 
         // all filters filters
       const filteredProducts = products.filter((product: Product) => {
 
         const categoryMatch =
             selected === "בחירה" ||
-            product.category === selected;
+             product.category?.includes(selected);
 
         const brandMatch =
             selectedBrands.length === 0 ||
@@ -304,6 +302,15 @@ export default function CatalogPage() {
         loadingMore,
         ]);
 
+        // make all candies first category
+        const sortedCategories = [...categories].sort((a, b) => {
+        if (a.title === "כל הממתקים") return -1;
+        if (b.title === "כל הממתקים") return 1;
+        return 0;
+        });
+
+console.log(selected);
+console.log(filteredProducts.length);
 
 
   return (
@@ -576,7 +583,7 @@ export default function CatalogPage() {
                     style={{
                         backgroundColor: settings?.category_nav_bg_color,
                     }}
-                    className="relative z-2 px-6 py-[17px] rounded-b-[6px]"
+                    className="relative z-2 px-6 py-[17px] rounded-b-[6px] bg-[#D41367]"
                     >
                     <div className="mx-auto max-w-[1360px]">
                         
@@ -607,10 +614,10 @@ export default function CatalogPage() {
                             },
                         }}
                         >
-                        {categories.map((item, index) => {
-                            const count = products.filter(
-                            (product) => product.category === item.title
-                            ).length;
+                            
+                        
+                            {sortedCategories.map((item, index) => {
+                           //const count = item.count;
 
                             const isActive = selected === item.title;
 
@@ -647,7 +654,7 @@ export default function CatalogPage() {
                                         : "bg-[#D41A68] text-white hover:bg-white hover:text-[#D41A68]"
                                     }`}
                                 >
-                                    {count}
+                                    {item.count}
                                 </div>
                                 </button>
                             </SwiperSlide>
@@ -796,7 +803,11 @@ export default function CatalogPage() {
                 {/* TOP */}
                 <div className=" flex items-start justify-end">
                     <div className="absolute right-0 top-[34px] rounded-tl-full rounded-bl-full bg-[#57c8c7] px-3 py-1 text-[13px] font-medium text-white">
-                    {product.category}
+                    {
+                        product.category?.find(
+                            (cat) => cat !== "כל הממתקים"
+                        ) || product.category?.[0]
+                        }
                     </div>
 
                     <div className="ml-[-14px] relative">

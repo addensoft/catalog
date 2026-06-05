@@ -7,7 +7,7 @@
 export async function GET() {
 
   const res = await fetch(
-    "https://addensoft.com/wp-json/wc/v3/products/tags",
+    "https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/tags",
     {
       headers: {
         Authorization:

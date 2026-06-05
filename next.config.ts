@@ -1,10 +1,13 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ["addensoft.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'sienna-duck-658240.hostingersite.com',
+      },
+    ],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

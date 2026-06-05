@@ -7,7 +7,7 @@
   export async function GET() {
     // categories api call
   const res = await fetch(
-    "https://addensoft.com/wp-json/wc/v3/products/categories?per_page=100",
+    "https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/categories?per_page=100",
     {
       headers: {
         Authorization:
