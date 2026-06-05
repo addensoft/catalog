@@ -64,7 +64,7 @@ export async function GET() {
         try {
 
           const brandRes = await fetch(
-            `https://addensoft.com/wp-json/wc/v3/products/brands/${brand.id}`,
+            `https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/brands/${brand.id}`,
             {
               headers: {
                 Authorization:
