@@ -93,25 +93,8 @@ export async function GET() {
           );
         }
       }
-
-      const barcodeImageId = item.meta_data.find(
-        (meta: any) => meta.key === "product_barcode"
-      )?.value;
-
-      let productBarcode = "/barcode/default.png";
-
-      if (barcodeImageId) {
-
-        const barcodeRes = await fetch(
-          `https://addensoft.com/wp-json/wp/v2/media/${barcodeImageId}`
-        );
-
-        const barcodeData = await barcodeRes.json();
-
-        productBarcode =
-          barcodeData.source_url ||
-          "/barcode/default.png";
-      }
+      
+    
       // size manuall maping
       const sizeUnitValue =
         item.meta_data.find(
@@ -128,6 +111,44 @@ export async function GET() {
       const sizeUnit =
         sizeUnitMap[sizeUnitValue] ||
         sizeUnitValue;
+
+
+// ===== Nutrition Repeater =====
+
+        const nutritionCount = Number(
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key === "nutrition_items"
+          )?.value || 0
+        );
+
+          const nutritionRows = [];
+
+          for (let i = 0; i < nutritionCount; i++) {
+
+            nutritionRows.push({
+              label:
+                item.meta_data.find(
+                  (meta: any) =>
+                    meta.key ===
+                    `nutrition_items_${i}_nutrition_label`
+                )?.value || "",
+
+              value:
+                item.meta_data.find(
+                  (meta: any) =>
+                    meta.key ===
+                    `nutrition_items_${i}_nutrition_value`
+                )?.value || "",
+
+              unit:
+                item.meta_data.find(
+                  (meta: any) =>
+                    meta.key ===
+                    `nutrition_items_${i}_nutrition_unit`
+                )?.value || "",
+            });
+          }
 
       return {
         
@@ -198,14 +219,37 @@ export async function GET() {
 
         sku: item.sku,
 
-        product_barcode: productBarcode,
-
         product_import_country:
           item.meta_data.find(
             (meta: any) =>
               meta.key ===
               "country_of_manufacture"
           )?.value || "",
+
+          // table on popup content
+           health_marking_ads:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "health_marking"
+          )?.value || "",
+
+           components_ads:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "components"
+          )?.value || "",
+
+           containing_ads:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "containing"
+          )?.value || "",
+
+          caleries_table_ads: nutritionRows,
+
 
       };
     })

@@ -11,6 +11,8 @@ import type { Brand } from "@/types/brands";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
+import Barcode from "react-barcode";
+
 import "swiper/css";
 
 
@@ -61,34 +63,7 @@ const sortOptions = [
   "שם (א-ת)",
 ];
 
-// faqs
- const faqItems = [
-    {
-     title: 'סימון בריאותי <span class="text-[16px] md:text-[22px] font-medium lg:text-[28px]">(אלרגנים)</span>',
-      content:
 
-        "מידע על אלרגנים יופיע כאן בהמשך.",
-    },
-    {
-      title: "רכיבים",
-      content:
-
-        "רכיבי המוצר יופיעו כאן בהמשך.",
-    },
-    {
-      title: "מכיל",
-      content:
-
-        "מידע נוסף יופיע כאן בהמשך.",
-    },
-    {
-      title: ' ערכים תזונתיים <span class="text-[16px] font-medium md:text-[22px] lg:text-[28px]">100 גרם</span>',
-      content:
-
-        "ערכים תזונתיים יופיעו כאן בהמשך.",
-    },
-  ];
-  
 
 
 
@@ -309,9 +284,60 @@ export default function CatalogPage() {
         return 0;
         });
 
-console.log(selected);
-console.log(filteredProducts.length);
+// faqs
+ const faqItems = [
+    {
+     title: 'סימון בריאותי <span class="text-[16px] md:text-[22px] font-medium lg:text-[28px]">(אלרגנים)</span>',
+      content: selectedProduct?.health_marking_ads,
+    },
+    {
+      title: "רכיבים",
+     content: selectedProduct?.components_ads,
+    },
+    {
+      title: "מכיל",
+      content: selectedProduct?.containing_ads,
+    },
+    {
+  title: ' ערכים תזונתיים <span class="text-[16px] font-medium md:text-[22px] lg:text-[28px]">100 גרם</span>',
+  content: (
+    <div className="overflow-x-auto pb-2">
+  <div className="flex min-w-max">
+    {selectedProduct?.caleries_table_ads?.map(
+      (row, index) => (
+        <div
+          key={index}
+          className="
+            w-[170px]
+            flex-shrink-0
+            px-2
+            py-2
+            text-center
+          "
+        >
+          {/* Label */}
+          <div className="min-h-[45px] mb-2 text-[18px] leading-[22px] font-bold  text-black">
+            {row.label}
+          </div>
 
+          {/* Value */}
+          <div className="text-[28px] mb-2 font-bold leading-none text-[#D41A68]">
+            {row.value}
+          </div>
+
+          {/* Unit */}
+          <div className="text-[20px] font-bold text-black">
+            {row.unit}
+          </div>
+        </div>
+      )
+    )}
+  </div>
+</div>
+  ),
+}
+  ];
+  
 
   return (
     <main dir="rtl" className="min-h-screen bg-[#F5CA5F]">
@@ -889,7 +915,7 @@ console.log(filteredProducts.length);
 
                     <h2 className="pl-8 text-[15px] font-bold leading-[18px] text-black md:text-[42px] md:leading-[46px]">
                     {selectedProduct?.title ||
-                        "מתתק בטעמי תות שדה ואוכמניות"}
+                        "dummy מתתק בטעמי תות שדה ואוכמניות"}
                     </h2>
 
                     <p className="mt-2 pl-12 text-[16px] font-medium leading-[22px] md:text-[33px]">
@@ -951,19 +977,14 @@ console.log(filteredProducts.length);
                                     </div>
 
                                     <div className="shrink-0 pt-2">
-
-                                    <Image
-                                          src={
-                                            selectedProduct?.product_barcode &&
-                                            selectedProduct.product_barcode.trim() !== ""
-                                            ? selectedProduct.product_barcode
-                                            : "/barcode.png"
-                                        }
-                                        alt="barcode"
-                                        width={140}
-                                        height={50}
-                                        className="h-auto object-contain"
-                                    />
+                                        <Barcode
+                                            value={selectedProduct.sku}
+                                            format="CODE128"
+                                            width={1.7}
+                                            height={80}
+                                            fontSize={10}
+                                            margin={0}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -1004,7 +1025,7 @@ console.log(filteredProducts.length);
                                 alt="brand"      
                                 width={300}      
                                 height={120}      
-                                className="h-auto max-h-[70px] w-auto object-contain"    
+                                className="h-auto max-h-[90px] w-auto object-contain"    
                                 />  
                                 </div>  
                                 {/* PRODUCT IMAGE */}  
