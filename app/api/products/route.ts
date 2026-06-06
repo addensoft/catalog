@@ -162,6 +162,9 @@ export async function GET() {
 
         slug: item.slug,
 
+          price: Number(item.price || 0),
+          date_created: item.date_created,
+
         image:
           item.images?.[0]?.src ||
           "/placeholder.png",

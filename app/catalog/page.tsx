@@ -209,7 +209,7 @@ export default function CatalogPage() {
             };
 
         // all filters filters
-      const filteredProducts = products.filter((product: Product) => {
+        const filteredProducts = products.filter((product: Product) => {
 
         const categoryMatch =
             selected === "בחירה" ||
@@ -248,8 +248,58 @@ export default function CatalogPage() {
         );
         });
 
+        const sortedProducts = [...filteredProducts];
+
+            // Date New → Old
+            if (selectedSort === "תאריך (מחדש לישן)") {
+            sortedProducts.sort(
+                (a, b) =>
+                new Date(b.date_created).getTime() -
+                new Date(a.date_created).getTime()
+            );
+            }
+
+            // Date Old → New
+            if (selectedSort === "תאריך (מישן לחדש)") {
+            sortedProducts.sort(
+                (a, b) =>
+                new Date(a.date_created).getTime() -
+                new Date(b.date_created).getTime()
+            );
+            }
+
+            // Price Low → High
+            if (selectedSort === "מחיר (מזול ליקר)") {
+            sortedProducts.sort(
+                (a, b) => a.price - b.price
+            );
+            }
+
+            // Price High → Low
+            if (selectedSort === "מחיר (מיקר לזול)") {
+            sortedProducts.sort(
+                (a, b) => b.price - a.price
+            );
+            }
+
+            // Brand A-Z
+            if (selectedSort === "מותג") {
+            sortedProducts.sort(
+                (a, b) =>
+                a.brand.localeCompare(b.brand, "he")
+            );
+            }
+
+            // Title A-Z
+            if (selectedSort === "שם (א-ת)") {
+            sortedProducts.sort(
+                (a, b) =>
+                a.title.localeCompare(b.title, "he")
+            );
+            }
+
         // load more products 
-        const displayedProducts = filteredProducts.slice(
+        const displayedProducts = sortedProducts.slice(
             0,
             visibleCount
         );
