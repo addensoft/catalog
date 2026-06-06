@@ -76,6 +76,9 @@ export default function CatalogPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [brands, setBrands] = useState<Brand[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
+    //const [kashrut, setKashrut] = useState<Kashrut[]>([]);
+    const [kashrut, setKashrut] = useState<any[]>([]);
+    const [dietary, setDietary] = useState<any[]>([]);
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -90,8 +93,13 @@ export default function CatalogPage() {
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+    //const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
     const [settings, setSettings] = useState<any>(null);
+     // kusher and daitery
+    const [selectedKashrut, setSelectedKashrut] = useState<string[]>([]);
+    const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+
+    const [searchTerm, setSearchTerm] = useState("");
 
     // on scroll show next 20 products
     const [visibleCount, setVisibleCount] = useState(10);
@@ -104,6 +112,8 @@ export default function CatalogPage() {
     // AUTO SLIDE
         const [activeImage, setActiveImage] = useState(0);
         const galleryImages = selectedProduct?.gallery_images || [];
+
+   
 
         useEffect(() => {
         if (galleryImages.length <= 1) return;
@@ -139,11 +149,26 @@ export default function CatalogPage() {
                 const tagsRes = await fetch("/api/tags");
                 const tagsData = await tagsRes.json();
                 setTags(tagsData);
+
             };
 
             fetchData();
 
             }, []);
+
+            useEffect(() => {
+                fetch("/api/kashrut")
+                    .then((res) => res.json())
+                    .then((data) => setKashrut(data))
+                    .catch((err) => console.error(err));
+                }, []);
+
+               useEffect(() => {
+                fetch("/api/dietary")
+                    .then((res) => res.json())
+                    .then((data) => setDietary(data))
+                    .catch((err) => console.error(err));
+                }, []);
 
     // Fetch options
         useEffect(() => {
@@ -194,18 +219,32 @@ export default function CatalogPage() {
             selectedBrands.length === 0 ||
             selectedBrands.includes(product.brand);
 
-        const tagsMatch =
-            selectedTags.length === 0 ||
-            product.tags.some((tag: string) =>
-                selectedTags.includes(tag)
+       const kashrutMatch =
+            selectedKashrut.length === 0 ||
+            selectedKashrut.some((k) =>
+                product.kashrut?.includes(k)
             );
+
+        const dietaryMatch =
+            selectedDietary.length === 0 ||
+            selectedDietary.some((d) =>
+                product.dietary?.includes(d)
+            );
+
+        const searchMatch =
+            searchTerm.trim() === "" ||
+            product.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.info?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.sku?.toLowerCase().includes(searchTerm.toLowerCase());
 
 
 
         return (
             categoryMatch &&
             brandMatch &&
-            tagsMatch
+            kashrutMatch &&
+            dietaryMatch &&
+            searchMatch
         );
         });
 
@@ -456,24 +495,25 @@ export default function CatalogPage() {
 
                                 <div className="flex flex-wrap gap-3">
                                     
-                                    {tags.map((item) => (
-                                    <button key={item.id}
-                                    onClick={() =>
-                                        toggleFilter(
-                                            item.name,
-                                            selectedTags,
-                                            setSelectedTags
-                                        )
-                                        }
-                                    className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                        selectedTags.includes(item.name)
-                                            ? "bg-[#F5CA5F] text-black"
-                                            : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
-                                        }`}
-                                    >
-                                        {item.name}
-                                    </button>
-                                    ))}
+                                   {kashrut.map((item) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() =>
+                                            toggleFilter(
+                                                item.name,
+                                                selectedKashrut,
+                                                setSelectedKashrut
+                                            )
+                                            }
+                                            className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
+                                            selectedKashrut.includes(item.name)
+                                                ? "bg-[#F5CA5F] text-black"
+                                                : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
+                                            }`}
+                                        >
+                                            {item.name}
+                                        </button>
+                                        ))}
                                 </div>
                                 </div>
 
@@ -494,7 +534,7 @@ export default function CatalogPage() {
                                             setSelectedBrands
                                         )
                                     }
-                                        className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
+                                        className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[20px] font-medium transition-all duration-200 ${
                                         selectedBrands.includes(item.name)
                                             ? "bg-[#F5CA5F] text-black"
                                             : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
@@ -514,22 +554,23 @@ export default function CatalogPage() {
                                 </h3>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {diteryFilterBtn.map((item) => (
+                                    {dietary.map((item) => (
                                     <button
-                                    onClick={() =>
+                                     key={item.id}
+                                        onClick={() =>
                                         toggleFilter(
-                                            item,
+                                            item.name,
                                             selectedDietary,
                                             setSelectedDietary
                                         )
-                                    }
+                                        }
                                         className={`cursor-pointer rounded-[12px] border border-[#D41A68] px-2 py-2 leading-[16px] text-[24px] font-medium transition-all duration-200 ${
-                                        selectedDietary.includes(item)
+                                        selectedDietary.includes(item.name)
                                             ? "bg-[#F5CA5F] text-black" 
                                             : "bg-white text-black hover:bg-[#D41A68] hover:text-white"
                                         }`}
                                     >
-                                        {item}
+                                        {item.name}
                                     </button>
                                     ))}
                                 </div>
@@ -565,6 +606,8 @@ export default function CatalogPage() {
                         <input
                             type="text"
                             placeholder="חפש מוצר"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full bg-transparent text-right text-[20px] font-bold text-black outline-none placeholder:text-[#000000]"
                         />
 

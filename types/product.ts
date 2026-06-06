@@ -28,4 +28,7 @@ export interface Product {
   value: string;
   unit: string;
 }[];
+
+  dietary: string[];
+  kashrut: string[];
 }

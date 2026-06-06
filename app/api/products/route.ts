@@ -250,6 +250,23 @@ export async function GET() {
 
           caleries_table_ads: nutritionRows,
 
+          //popop filters ditery and kosher
+          dietary:
+            item.attributes
+              ?.find(
+                (attr: any) =>
+                  attr.name.includes("Dietary")
+              )
+              ?.options || [],
+
+          kashrut:
+            item.attributes
+              ?.find(
+                (attr: any) =>
+                  attr.name.includes("Kashrut")
+              )
+              ?.options || [],
+
 
       };
     })
