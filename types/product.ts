@@ -32,4 +32,5 @@ export interface Product {
   dietary: string[];
   kashrut: string[];
   date_created: string;
+   price: number;
 }
