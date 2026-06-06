@@ -17,9 +17,6 @@ import "swiper/css";
 
 
 
-
-
-
 // filters
 const filters = [
   "ממתקי ילדים",
@@ -62,11 +59,6 @@ const sortOptions = [
   "מותג",
   "שם (א-ת)",
 ];
-
-
-
-
-
 
 
 export default function CatalogPage() {
@@ -1230,6 +1222,4 @@ export default function CatalogPage() {
     // popup product
     
   );
-  
-  
 }
