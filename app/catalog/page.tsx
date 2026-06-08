@@ -105,6 +105,8 @@ export default function CatalogPage() {
         const [activeImage, setActiveImage] = useState(0);
         const galleryImages = selectedProduct?.gallery_images || [];
 
+        const [loading, setLoading] = useState(true);
+
    
 
         useEffect(() => {
@@ -126,23 +128,32 @@ export default function CatalogPage() {
 
             const fetchData = async () => {
 
-                const productsRes = await fetch("/api/products");
-                const productsData = await productsRes.json();
-                setProducts(productsData);
+                setLoading(true);
 
-                const categoriesRes = await fetch("/api/categories");
-                const categoriesData = await categoriesRes.json();
-                setCategories(categoriesData);
+                try {
 
-                const brandsRes = await fetch("/api/brands");
-                const brandsData = await brandsRes.json();
-                setBrands(brandsData);
+                    const productsRes = await fetch("/api/products");
+                    const productsData = await productsRes.json();
+                    setProducts(productsData);
 
-                const tagsRes = await fetch("/api/tags");
-                const tagsData = await tagsRes.json();
-                setTags(tagsData);
+                    const categoriesRes = await fetch("/api/categories");
+                    const categoriesData = await categoriesRes.json();
+                    setCategories(categoriesData);
 
-            };
+                    const brandsRes = await fetch("/api/brands");
+                    const brandsData = await brandsRes.json();
+                    setBrands(brandsData);
+
+                    const tagsRes = await fetch("/api/tags");
+                    const tagsData = await tagsRes.json();
+                    setTags(tagsData);
+
+                } finally {
+
+                    setLoading(false);
+
+                }
+                };
 
             fetchData();
 
@@ -879,10 +890,20 @@ export default function CatalogPage() {
                 )}
             </div>
 
+                
              {/* products loop */}
             <div className="mx-auto grid items-stretch max-w-[1200px] grid-cols-1 gap-y-[40px] gap-x-[96px] md:grid-cols-2 xl:grid-cols-3">
 
-            {displayedProducts.map((product) => (
+            {
+                loading
+  ? [...Array(9)].map((_, index) => (
+      <div
+        key={index}
+        className="bg-white h-[520px] animate-pulse"
+      />
+    ))
+            
+            :displayedProducts.map((product) => (
 
                 <div key={product.id} 
                 onClick={() => setSelectedProduct(product)}
@@ -910,6 +931,7 @@ export default function CatalogPage() {
                         className="object-fill"
                         />
                     </div>
+
                <div className="relative z-10 flex h-full flex-col bg-white px-[25px] pb-10 pt-8">
                 {/* TOP */}
                 <div className=" flex items-start justify-end">
@@ -972,9 +994,11 @@ export default function CatalogPage() {
                     צפה במוצר
                 </p>
                     </div>
+
                 </div>
             ))}
             </div>
+
         </section>
 
         {/* products popup */}
