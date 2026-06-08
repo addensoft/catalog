@@ -1,5 +1,5 @@
 
-const WP_URL = process.env.WORDPRESS_URL;
+const WP_URL = process.env.WC_URL;
 export async function GET() {
 
   const res = await fetch(
