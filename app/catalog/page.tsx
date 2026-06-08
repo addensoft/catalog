@@ -588,10 +588,10 @@ export default function CatalogPage() {
 
               {/* POPUP BODY */}
               <div className="overflow-y-auto p-3 md:p-5">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-[60%_38%]">
+                <div className="grid grid-cols-1 gap-4 mb-9 md:grid-cols-[60%_38%]">
 
                   {/* CONTENT SIDE */}
-                  <div className="order-2 md:order-1 min-w-0 border border-[#D41A68] bg-white px-4 lg:pl-20 text-right">
+                  <div className="order-2 md:order-1 min-w-0  bg-white px-4 lg:pl-20 text-right">
                     {[
                       { label: "מותג", value: selectedProduct?.brand },
                       { label: "שם המוצר באנגלית", value: selectedProduct?.product_engname_ads },
@@ -635,7 +635,7 @@ export default function CatalogPage() {
                   </div>
 
                   {/* IMAGE SIDE */}
-                  <div className="order-1 md:order-2 min-w-0 border border-[#D41A68] relative bg-white p-4">
+                  <div className="order-1 md:order-2 min-w-0 relative bg-white p-4">
                     <div className="mb-4 flex justify-end">
                       <Image src={selectedProduct?.brand_image || "/logo.png"} alt="brand"
                         width={300} height={120} className="h-auto max-h-[90px] w-auto object-contain" />
