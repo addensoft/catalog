@@ -33,4 +33,7 @@ export interface Product {
   kashrut: string[];
   date_created: string;
    price: number;
+
+   product_engname_ads: string;
+   corton_friction_pak_ads: string;
 }

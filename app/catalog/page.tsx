@@ -1031,6 +1031,19 @@ export default function CatalogPage() {
                             </p>
                             </div>
 
+                            {/* product english name */}
+                             <div className="border-b-[2px] border-[#46BAB9] py-2">
+
+                            <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                   שם המוצר באנגלית
+                                </p>
+
+                           <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                {selectedProduct?.product_engname_ads ||
+                                '14 גרם יח׳ 50 במארז | משקל כולל 700 גרם'}
+                            </p>
+                            </div>
+
                             {/* Info */}
                             <div className="border-b-[2px] border-[#46BAB9] py-2">
 
@@ -1082,6 +1095,17 @@ export default function CatalogPage() {
 
                                 <p className="mt-1 break-words text-[22px] whitespace-pre-line leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
                                     {selectedProduct?.kesheria_single}
+                                </p>
+                            </div>
+
+                            {/* carton fraction */}
+                             <div className="border-b-[2px] border-[#46BAB9] py-2">
+                                <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">
+                                   פרטי אריזה בקרטון
+                                </p>
+
+                                <p className="mt-1 break-words text-[22px] whitespace-pre-line leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
+                                    {selectedProduct?.corton_friction_pak_ads}
                                 </p>
                             </div>
 

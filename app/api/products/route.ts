@@ -163,6 +163,7 @@ export async function GET() {
         slug: item.slug,
 
           price: Number(item.price || 0),
+
           date_created: item.date_created,
 
         image:
@@ -230,6 +231,21 @@ export async function GET() {
           )?.value || "",
 
           // table on popup content
+           product_engname_ads:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "english_name_product"
+          )?.value || "",
+
+          corton_friction_pak_ads:
+          item.meta_data.find(
+            (meta: any) =>
+              meta.key ===
+              "carton_factors"
+          )?.value || "",
+
+
            health_marking_ads:
           item.meta_data.find(
             (meta: any) =>
