@@ -1,6 +1,9 @@
+const WP_URL = process.env.WORDPRESS_URL;
+
+
 export async function GET() {
   const res = await fetch(
-    "https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/attributes/1/terms",
+    `${WP_URL}/wp-json/wc/v3/products/attributes/1/terms`,
     {
       headers: {
         Authorization:

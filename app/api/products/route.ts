@@ -1,295 +1,158 @@
-// import { products } from "@/data/products";
+const WP_URL = process.env.WORDPRESS_URL;
 
-// export async function GET() {
-//   return Response.json(products);
-// }
+const authHeader = {
+  Authorization:
+    "Basic " +
+    Buffer.from(
+      process.env.WC_KEY + ":" + process.env.WC_SECRET
+    ).toString("base64"),
+};
 
-// export async function GET() {
-
-//   const res = await fetch("http://localhost:4000/products");
-
-//   const products = await res.json();
-
-//   return Response.json(products);
-
-// }
-
+const fetchOpts = {
+  headers: authHeader,
+  next: { revalidate: 3600 },
+};
 
 export async function GET() {
+  try {
 
-  let allProducts: any[] = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-
-    const res = await fetch(
-      `https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products?per_page=100&page=${page}`,
-      {
-        headers: {
-          Authorization:
-            "Basic " +
-            Buffer.from(
-              process.env.WC_KEY +
-              ":" +
-              process.env.WC_SECRET
-            ).toString("base64"),
-        },
-        cache: "no-store",
-      }
+    // ── STEP 1: Fetch first page + get total pages ──
+    const firstRes = await fetch(
+      `${WP_URL}/wp-json/wc/v3/products?per_page=100&page=1`,
+      fetchOpts
     );
 
-    const data = await res.json();
+    const totalPages = Number(
+      firstRes.headers.get("X-WP-TotalPages") || 1
+    );
 
-    if (data.length === 0) {
-      hasMore = false;
-      break;
+    const firstData = await firstRes.json();
+
+    // ── STEP 2: Fetch all remaining pages IN PARALLEL ──
+    let allProducts = [...firstData];
+
+    if (totalPages > 1) {
+      const restFetches = Array.from(
+        { length: totalPages - 1 },
+        (_, i) =>
+          fetch(
+            `${WP_URL}/wp-json/wc/v3/products?per_page=100&page=${i + 2}`,
+            fetchOpts
+          ).then((r) => r.json())
+      );
+
+      const restData = await Promise.all(restFetches);
+      allProducts = [firstData, ...restData].flat();
     }
 
-    allProducts = [...allProducts, ...data];
+    // ── STEP 3: Collect unique brand IDs ──
+    const uniqueBrandIds = [
+      ...new Set(
+        allProducts
+          .map((item: any) => item.brands?.[0]?.id)
+          .filter(Boolean)
+      ),
+    ] as number[];
 
-    page++;
-  }
+    // ── STEP 4: Fetch all unique brands IN PARALLEL (not once per product!) ──
+    const brandImageMap: Record<number, string> = {};
 
-  const products = await Promise.all(
-    allProducts.map(async (item: any) => {
-
-    // brand thumbnail
-    const brand = item.brands?.[0];
-
-      let brandThumbnail = "/brands/default.png";
-
-      if (brand?.id) {
-
+    await Promise.all(
+      uniqueBrandIds.map(async (brandId) => {
         try {
-
-          const brandRes = await fetch(
-            `https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/brands/${brand.id}`,
-            {
-              headers: {
-                Authorization:
-                  "Basic " +
-                  Buffer.from(
-                    process.env.WC_KEY +
-                    ":" +
-                    process.env.WC_SECRET
-                  ).toString("base64"),
-              },
-              cache: "no-store",
-            }
+          const res = await fetch(
+            `${WP_URL}/wp-json/wc/v3/products/brands/${brandId}`,
+            fetchOpts
           );
-
-          const brandData = await brandRes.json();
-
-          brandThumbnail =
-            brandData.image?.src ||
-            "/brands/default.png";
-
-        } catch (error) {
-
-          console.log(
-            "Brand image fetch error:",
-            error
-          );
+          const data = await res.json();
+          brandImageMap[brandId] =
+            data.image?.src || "/brands/default.png";
+        } catch {
+          brandImageMap[brandId] = "/brands/default.png";
         }
+      })
+    );
+
+    // ── STEP 5: Map products (no more async needed here) ──
+    const sizeUnitMap: Record<string, string> = {
+      gram: "גרם",
+      ml: 'מ"ל',
+      kg: 'ק"ג',
+    };
+
+    const products = allProducts.map((item: any) => {
+
+      // Pre-index all meta_data into a plain object for fast lookups
+      const meta: Record<string, any> = {};
+      for (const m of item.meta_data) {
+        meta[m.key] = m.value;
       }
-      
-    
-      // size manuall maping
-      const sizeUnitValue =
-        item.meta_data.find(
-          (meta: any) =>
-            meta.key === "size_unit"
-        )?.value || "";
 
-      const sizeUnitMap: any = {
-        gram: "גרם",
-        ml: 'מ"ל',
-        kg: 'ק"ג',
-      };
+      // Brand
+      const brand = item.brands?.[0];
+      const brandThumbnail = brand?.id
+        ? (brandImageMap[brand.id] ?? "/brands/default.png")
+        : "/brands/default.png";
 
-      const sizeUnit =
-        sizeUnitMap[sizeUnitValue] ||
-        sizeUnitValue;
+      // Size unit
+      const sizeUnitValue = meta["size_unit"] || "";
+      const sizeUnit = sizeUnitMap[sizeUnitValue] || sizeUnitValue;
 
-
-// ===== Nutrition Repeater =====
-
-        const nutritionCount = Number(
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key === "nutrition_items"
-          )?.value || 0
-        );
-
-          const nutritionRows = [];
-
-          for (let i = 0; i < nutritionCount; i++) {
-
-            nutritionRows.push({
-              label:
-                item.meta_data.find(
-                  (meta: any) =>
-                    meta.key ===
-                    `nutrition_items_${i}_nutrition_label`
-                )?.value || "",
-
-              value:
-                item.meta_data.find(
-                  (meta: any) =>
-                    meta.key ===
-                    `nutrition_items_${i}_nutrition_value`
-                )?.value || "",
-
-              unit:
-                item.meta_data.find(
-                  (meta: any) =>
-                    meta.key ===
-                    `nutrition_items_${i}_nutrition_unit`
-                )?.value || "",
-            });
-          }
+      // Nutrition rows
+      const nutritionCount = Number(meta["nutrition_items"] || 0);
+      const nutritionRows = Array.from(
+        { length: nutritionCount },
+        (_, i) => ({
+          label: meta[`nutrition_items_${i}_nutrition_label`] || "",
+          value: meta[`nutrition_items_${i}_nutrition_value`] || "",
+          unit:  meta[`nutrition_items_${i}_nutrition_unit`]  || "",
+        })
+      );
 
       return {
-        
-
-        id: item.id,
-
-        title:
-          item.name
-            ?.replace(/\\n/g, "\n")
-            ?.replace(/<br\s*\/?>/gi, "\n") || "",
-
-        slug: item.slug,
-
-          price: Number(item.price || 0),
-
-          date_created: item.date_created,
-
-        image:
-          item.images?.[0]?.src ||
-          "/placeholder.png",
-
-        gallery_images:
-          item.images?.map(
-            (img: any) => img.src
-          ) || [],
-
-        brand_image: brandThumbnail,
-
-        category:
-        item.categories?.map(
-          (cat: any) => cat.name
-        ) || [],
-
-        brand:
-          item.brands?.[0]?.name || "",
-
-        info:
-          // item.short_description
-          //   ?.replace(/<[^>]*>/g, "")
-          //   ?.replace(/<br\s*\/?>/gi, "\n") || "",
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "factor_of_friction"
-          )?.value || "",
-
-        tags:
-          // item.tags?.map(
-          //   (tag: any) => tag.name
-          // ) || [],
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "kashrut_כַּשְׁרוּת_for_shop"
-          )?.value || "",
-
-          kesheria_single:
-             item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "kashrut"
-          )?.value || "",
-
-        size_value:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "size_value"
-          )?.value || "",
-
-        size_unit: sizeUnit,
-
-        sku: item.sku,
-
-        product_import_country:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "country_of_manufacture"
-          )?.value || "",
-
-          // table on popup content
-           product_engname_ads:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "english_name_product"
-          )?.value || "",
-
-          corton_friction_pak_ads:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "carton_factors"
-          )?.value || "",
-
-
-           health_marking_ads:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "health_marking"
-          )?.value || "",
-
-           components_ads:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "components"
-          )?.value || "",
-
-           containing_ads:
-          item.meta_data.find(
-            (meta: any) =>
-              meta.key ===
-              "containing"
-          )?.value || "",
-
-          caleries_table_ads: nutritionRows,
-
-          //popop filters ditery and kosher
-          dietary:
-            item.attributes
-              ?.find(
-                (attr: any) =>
-                  attr.name.includes("Dietary")
-              )
-              ?.options || [],
-
-          kashrut:
-            item.attributes
-              ?.find(
-                (attr: any) =>
-                  attr.name.includes("Kashrut")
-              )
-              ?.options || [],
-
-
+        id:           item.id,
+        title:        item.name
+                        ?.replace(/\\n/g, "\n")
+                        ?.replace(/<br\s*\/?>/gi, "\n") || "",
+        slug:         item.slug,
+        price:        Number(item.price || 0),
+        date_created: item.date_created,
+        image:        item.images?.[0]?.src || "/placeholder.png",
+        gallery_images: item.images?.map((img: any) => img.src) || [],
+        brand_image:  brandThumbnail,
+        category:     item.categories?.map((cat: any) => cat.name) || [],
+        brand:        brand?.name || "",
+        info:         meta["factor_of_friction"]                    || "",
+        tags:         meta["kashrut_כַּשְׁרוּת_for_shop"]           || "",
+        kesheria_single: meta["kashrut"]                            || "",
+        size_value:   meta["size_value"]                            || "",
+        size_unit:    sizeUnit,
+        sku:          item.sku,
+        product_import_country: meta["country_of_manufacture"]      || "",
+        product_engname_ads:    meta["english_name_product"]        || "",
+        corton_friction_pak_ads: meta["carton_factors"]             || "",
+        health_marking_ads:     meta["health_marking"]              || "",
+        components_ads:         meta["components"]                  || "",
+        containing_ads:         meta["containing"]                  || "",
+        caleries_table_ads:     nutritionRows,
+        dietary:
+          item.attributes
+            ?.find((attr: any) => attr.name.includes("Dietary"))
+            ?.options || [],
+        kashrut:
+          item.attributes
+            ?.find((attr: any) => attr.name.includes("Kashrut"))
+            ?.options || [],
       };
-    })
-  );
+    });
 
-  return Response.json(products);
+    return Response.json(products);
+
+  } catch (error) {
+    console.error("Products API error:", error);
+    return Response.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
+  }
 }

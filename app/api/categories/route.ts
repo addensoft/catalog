@@ -1,13 +1,9 @@
-// import { categories } from "@/data/categories";
 
-// export async function GET() {
-//   return Response.json(categories);
-// }
-
+const WP_URL = process.env.WORDPRESS_URL;
   export async function GET() {
     // categories api call
   const res = await fetch(
-    "https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/categories?per_page=100",
+    `${WP_URL}/wp-json/wc/v3/products/categories?per_page=100`,
     {
       headers: {
         Authorization:

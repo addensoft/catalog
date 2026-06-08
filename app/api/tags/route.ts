@@ -1,13 +1,9 @@
-// import { tags } from "@/data/tags";
 
-// export async function GET() {
-//   return Response.json(tags);
-// }
-
+const WP_URL = process.env.WORDPRESS_URL;
 export async function GET() {
 
   const res = await fetch(
-    "https://sienna-duck-658240.hostingersite.com/wp-json/wc/v3/products/tags",
+    `${WP_URL}/wp-json/wc/v3/products/tags`,
     {
       headers: {
         Authorization:
