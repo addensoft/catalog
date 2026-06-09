@@ -218,7 +218,18 @@ export default function CatalogPage() {
     },
     {
       title: "מכיל",
-      content: selectedProduct?.containing_ads,
+       content: (
+                <div className="flex items-start gap-4 justify-between">
+                <div>
+                    {selectedProduct?.containing_ads}
+                </div>
+                 <img
+                    src="contains-icon.svg"
+                    alt=""
+                    className="w-25 h-25 object-contain flex-shrink-0"
+                />
+                </div>
+            ),
     },
     {
       title: 'ערכים תזונתיים <span class="text-[16px] font-medium md:text-[22px] lg:text-[28px]">100 גרם</span>',
@@ -678,7 +689,7 @@ export default function CatalogPage() {
                             dangerouslySetInnerHTML={{ __html: item.title }} />
                         </button>
                         <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}`}>
-                          <div className="bg-white px-5 py-5 text-right text-[16px] leading-[30px] text-black md:text-[18px] md:leading-[34px]">
+                          <div className="bg-white px-5 py-5 text-right text-[16px] leading-[30px] text-black md:text-[22px] md:leading-[34px]">
                             {item.content}
                           </div>
                         </div>

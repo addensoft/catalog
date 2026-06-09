@@ -81,7 +81,7 @@ export default function HomePage() {
 
     {/* BUTTON */}
     <Link
-      href="/catalog"
+      href="/about"
       className="
         mt-4
         rounded-full
