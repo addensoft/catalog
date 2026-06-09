@@ -128,7 +128,7 @@ export default function CustomersPage() {
         ✅ Use aspect-ratio instead of hardcoded heights so it's truly responsive.
       */}
       <section className="relative -mx-6 mb-6 mt-[-280px] lg:-mx-0 lg:mt-[-300px]">
-        <div className="relative w-full" style={{ aspectRatio: "1300/1100" }}>
+        <div className="relative w-full" style={{ aspectRatio: "1200/00" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/truck.svg"
@@ -136,8 +136,8 @@ export default function CustomersPage() {
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover"
-            width={1300}
-            height={1100}
+            width={1100}
+            height={700}
           />
         </div>
       </section>
@@ -162,7 +162,7 @@ export default function CustomersPage() {
 
       {/* ── SECTION 5: Warehouse SVG ── */}
       <section className="relative -mr-6 mb-10 lg:-mr-0">
-        <div className="relative w-full" style={{ aspectRatio: "1300/800" }}>
+        <div className="relative " style={{ aspectRatio: "800/0" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/whearhouse.svg"
@@ -170,8 +170,8 @@ export default function CustomersPage() {
             loading="lazy"
             decoding="async"
             className="h-full w-full object-contain"
-            width={1300}
-            height={800}
+            width={1100}
+            height={600}
           />
         </div>
       </section>
@@ -222,7 +222,7 @@ export default function CustomersPage() {
         </div>
 
         {/* Cows illustration — ✅ explicit aspect ratio, lazy loaded */}
-        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/440" }}>
+        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/0" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/last-cows.svg"
