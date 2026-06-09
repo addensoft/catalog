@@ -6,45 +6,44 @@ export default function CustomersPage() {
   return (
     <main
       dir="rtl"
-      className="min-h-screen w-full"
-      style={{ 
-         backgroundImage: "url('/mian-about-bg.webp')",
+      className="min-h-screen w-full overflow-x-hidden"
+      style={{
+        backgroundImage: "url('/mian-about-bg.webp')",
         backgroundSize: "cover",
-    }}
+        backgroundAttachment: "fixed", // smoother on desktop
+      }}
     >
 
       {/* ── HEADER ── */}
-      <header className="relative flex items-baseline justify-between px-5 py-4 lg:px-10 lg:py-6 relative z-2 min-h-[215px]"
-         style={{ 
-        backgroundImage: "url('/frame-187.svg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
-    }}
+      <header
+        className="relative z-10 flex min-h-[160px] items-baseline justify-between px-5 py-4 lg:min-h-[215px] lg:px-10 lg:py-6"
+        style={{
+          backgroundImage: "url('/frame-187.svg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-
-        {/* Logo — top right */}
+        {/* Logo */}
         <div className="flex items-center">
-          <Link
-           href="/"
-          className=""
-        >
-          <Image
-            src="/logo-home.png"
-            alt="יבואני הממתקים"
-            width={340}
-            height={100}
-            className="h-[108px] w-auto object-contain lg:h-[170px] absolute top-[0]"
-            priority
-            unoptimized
-          />
-           </Link>
+          <Link href="/">
+            <Image
+              src="/logo-home.png"
+              alt="יבואני הממתקים"
+              width={340}
+              height={100}
+              // ✅ fixed position logo — give it explicit size, no fill
+              className="absolute top-0 h-[108px] w-auto object-contain lg:h-[170px]"
+              priority
+              sizes="(max-width: 1024px) 200px, 340px"
+            />
+          </Link>
         </div>
 
-        {/* Back button — top left (in RTL this is on the left visually) */}
+        {/* Back button */}
         <Link
           href="/catalog"
-          className="flex items-center gap-3 rounded-full bg-white px-9 py-1 text-[16px] font-[600] text-[#43B9B9] shadow-md transition-all duration-200 hover:bg-[#D41A68] hover:text-white lg:px-6 lg:pr-[16px] lg:py-2 lg:text-[20px]"
+          className="flex items-center gap-3 rounded-full bg-white px-6 py-2 text-[16px] font-[600] text-[#43B9B9] shadow-md transition-all duration-200 hover:bg-[#D41A68] hover:text-white lg:text-[20px]"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
             viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} className="rotate-180">
@@ -52,99 +51,95 @@ export default function CustomersPage() {
           </svg>
           לקטלוג
         </Link>
-
       </header>
 
       {/* ── SECTION 1: Hero / Intro ── */}
-      <section className="px-6 pb-10 pt-6 text-center lg:pb-16 lg:pt-[95px] relative z-1 mt-[-200px]" 
-      style={{ 
-        backgroundImage: "url('/white-corve.svg')",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain",
-        backgroundPosition: "center top",
-    }}
+      <section
+        className="relative z-[1] mt-[-160px] px-6 pb-10 pt-6 text-center lg:mt-[-200px] lg:pb-16 lg:pt-[95px]"
+        style={{
+          backgroundImage: "url('/white-corve.svg')",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "contain",
+          backgroundPosition: "center top",
+        }}
       >
-        <div className=" max-w-[725px] mx-auto ">
-        <h1 className="mb-6 text-[32px] font-black leading-[1.2] text-[#D41A68] lg:text-[52px] min-h-[50px]"
-        style={{ 
-        backgroundImage: "url('/heading.webp')",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain",
-        backgroundPosition: "center top",
-    }}
-        
-        >
-        
-        </h1>
+        <div className="mx-auto max-w-[725px]">
 
-        <p className="mb-8 text-[15px] font-medium leading-[26px] text-black lg:text-[19px] lg:leading-[30px]">
-          אנחנו יודעים מי אתם. אנחנו יודעים שמאחורי כל לקוח, רשת או עסק מצליח עומדים אנשים
-          שמקדישים מזמנם, ממרצם ומנסיונם לנהל עסקים קטנים ובינוניים וסוחרים הממוקדים בפרנסת
-          ולקוחות שלהם. אנחנו יודעים שהדרך לא תמיד פשוטה ושכל הצלחה שלכם בבנייה בהתמדה
-          ובעשר אצבעות.
-          <br />
-          אנחנו יודעים את זה כי אנחנו בדיוק כמוכם.
-        </p>
+          {/* Heading image — ✅ use <Image> with explicit width/height, not background */}
+          <div className="relative mx-auto mb-6 h-[60px] w-full max-w-[500px] lg:h-[90px]">
+            <Image
+              src="/heading.webp"
+              alt="לקוחות ושותפים יקרים"
+              fill
+              sizes="(max-width: 768px) 90vw, 500px"
+              className="object-contain"
+              priority
+            />
+          </div>
 
-        {/* Highlighted italic paragraph */}
-        <div className="text-center text-[16px] leading-[24px] lg:text-[24px] lg:leading-[30px] font-regular text-[#C10051]">
-          <p>
-            חברת יבואני הממתקים נולדה מתוך השטח ומתוך{" "}
-            <span className="font-bold">חיבור אמיתי</span>{" "}
-            לעולם הקמעונאות. כשאבשלום משה ודוד ברוכאל הקימו את החברה המרכז הייתה
-            ברורה: להיות{" "}
-            <span className="font-bold">שותף שאפשר לסמוך עליו</span>
-            . שותף שכבד עבודה קשה, מבין
-            את גודל האחריות ויודע שבסוף היום כולנו כאן כדי לספק{" "}
-            <span className="font-bold">ממתקים שעושים</span>
-            {" "}<span className="font-bold">שמח</span>{" "}
-            כל בהמד.
+          <p className="mb-8 text-[15px] font-medium leading-[26px] text-black lg:text-[19px] lg:leading-[30px]">
+            אנחנו יודעים מי אתם. אנחנו יודעים שמאחורי כל לקוח, רשת או עסק מצליח עומדים אנשים
+            שמקדישים מזמנם, ממרצם ומנסיונם לנהל עסקים קטנים ובינוניים וסוחרים הממוקדים בפרנסת
+            ולקוחות שלהם. אנחנו יודעים שהדרך לא תמיד פשוטה ושכל הצלחה שלכם בבנייה בהתמדה
+            ובעשר אצבעות.
+            <br />
+            אנחנו יודעים את זה כי אנחנו בדיוק כמוכם.
           </p>
-        </div>
-        </div>
-      </section>
 
-      {/* ── SECTION 2: Quality — text + cow mascot ── */}
-      <section className="mx-auto max-w-[725px] text-center px-6 py-10 lg:py-16">
-        <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:gap-12">
-
-          {/* Text — right side in RTL */}
-          <div className="order-2 flex-1 text-center lg:order-1">
-            <h2 className="mb-1 text-[28px] font-bold leading-[1.3] text-[#D41367] lg:text-[50px]">
-              איכות, בחירה וערר
-            </h2>
-            <p className="text-[15px] font-regular leading-[28px] text-black lg:text-[22px] lg:leading-[34px]">
-              אנחנו לא רק מביאים ממתקים אלא{" "}
-              <span className="font-bold text-[#D41367]">בוחרים אותם אחד אחד בקפידה</span>
-              . אנחנו טועסים, בודקים וטועמים מוצרים בכל העולם כדי להביא אליכם את הטירנים
-              המובילים מאירופה, מאסיה ומרחבי הגלובוס. כל מוצר שבחנו לקסלקם זכה נבחר
-              מתוך מחשבה עליכם, על המדף שלכם ועל{" "}
-              <span className="font-bold text-[#D41367]">הרווחיות שלכם</span>
-              . הכל נגשה
-              בסטנדרטים הגבוהים ביותר של איכות ו
-              <span className="font-bold text-[#D41367]">גשרות מוקפדת</span>{" "}
-              מתוך מחויבות עמוקה לשוק הישראלי.
+          <div className="text-center text-[16px] font-normal leading-[24px] text-[#C10051] lg:text-[24px] lg:leading-[30px]">
+            <p>
+              חברת יבואני הממתקים נולדה מתוך השטח ומתוך{" "}
+              <span className="font-bold">חיבור אמיתי</span>{" "}
+              לעולם הקמעונאות. כשאבשלום משה ודוד ברוכאל הקימו את החברה המרכז הייתה
+              ברורה: להיות{" "}
+              <span className="font-bold">שותף שאפשר לסמוך עליו</span>
+              . שותף שכבד עבודה קשה, מבין
+              את גודל האחריות ויודע שבסוף היום כולנו כאן כדי לספק{" "}
+              <span className="font-bold">ממתקים שעושים שמח</span>{" "}
+              כל בהמד.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── SECTION 3: Truck photo with blob ── */}
-      <section className="relative mx-auto mb-10 px-4 lg:mb-6 lg:px-6 ml-[-25px] mr-[-25px] mt-[-300px]">
-                <div className="relative w-full lg:h-[1100px]">
-                    <Image
-                    src="/truck.svg"
-                    alt="משאיות יבואני הממתקים"
-                    fill
-                    className="object-cover"
-                    onError={(e) => {
-                        // fallback if image doesn't exist
-                        (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                    unoptimized
-                    />
+      {/* ── SECTION 2: Quality text ── */}
+      <section className="mx-auto max-w-[725px] px-6 py-10 text-center lg:py-16">
+        <h2 className="mb-1 text-[28px] font-bold leading-[1.3] text-[#D41367] lg:text-[50px]">
+          איכות, בחירה וערר
+        </h2>
+        <p className="text-[15px] font-normal leading-[28px] text-black lg:text-[22px] lg:leading-[34px]">
+          אנחנו לא רק מביאים ממתקים אלא{" "}
+          <span className="font-bold text-[#D41367]">בוחרים אותם אחד אחד בקפידה</span>
+          . אנחנו טועסים, בודקים וטועמים מוצרים בכל העולם כדי להביא אליכם את הטירנים
+          המובילים מאירופה, מאסיה ומרחבי הגלובוס. כל מוצר שבחנו לקסלקם זכה נבחר
+          מתוך מחשבה עליכם, על המדף שלכם ועל{" "}
+          <span className="font-bold text-[#D41367]">הרווחיות שלכם</span>
+          . הכל נגשה בסטנדרטים הגבוהים ביותר של איכות ו
+          <span className="font-bold text-[#D41367]">גשרות מוקפדת</span>{" "}
+          מתוך מחויבות עמוקה לשוק הישראלי.
+        </p>
+      </section>
 
-          </div>
+      {/* ── SECTION 3: Truck SVG ── */}
+      {/* 
+        ✅ SVG illustrations: use <img> tag (not Next/Image) for SVGs that are 
+        already vector — Next.js can't optimize SVGs further and unoptimized 
+        defeats the point. But DO give explicit width/height to avoid layout shift.
+        ✅ Use aspect-ratio instead of hardcoded heights so it's truly responsive.
+      */}
+      <section className="relative -mx-6 mb-6 mt-[-280px] lg:-mx-0 lg:mt-[-300px]">
+        <div className="relative w-full" style={{ aspectRatio: "1300/1100" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/truck.svg"
+            alt="משאיות יבואני הממתקים"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+            width={1300}
+            height={1100}
+          />
+        </div>
       </section>
 
       {/* ── SECTION 4: Professional family company ── */}
@@ -154,90 +149,95 @@ export default function CustomersPage() {
           <br />
           יחס של משפחה
         </h2>
-        <p className="text-[15px] font-regular leading-[28px] text-black lg:text-[22px] lg:leading-[32px]">
+        <p className="text-[15px] font-normal leading-[28px] text-black lg:text-[22px] lg:leading-[32px]">
           מהמרכז הלוגיסטי המתקדם שלנו בצפון אנחנו מפעילים מערך הפצה מקצועי שמגיע
           לאפרי נקודות מכירה בכל הארץ. עברנו כל לשלות שיאיו{" "}
           <span className="font-bold text-[#D41A68]">בזמן וכדיוק</span>{" "}
-          הוא הבנחה
-          שקופים. אנחנו לא מחפשים עסקאות קצרות אלא בלא בנים{" "}
-          <span className="font-bold text-[#D41A68]">מערכות יחסים ארוכות</span>
-          {" "}<span className="font-bold text-[#D41A68]">טווח</span>{" "}
+          הוא הבנחה שקופים. אנחנו לא מחפשים עסקאות קצרות אלא בלא בנים{" "}
+          <span className="font-bold text-[#D41A68]">מערכות יחסים ארוכות טווח</span>{" "}
           המבוססות על אמון. נאמנו וישרות אמיתי שעושה פשוט{" "}
           <span className="font-bold text-[#D41A68]">שמח לעבוד יחד</span>.
         </p>
       </section>
 
-      {/* ── SECTION 5: Warehouse photo with blob ── */}
-      <section className="relative mx-auto mb-10 mr-[-25px]">
-          <div className="relative h-[240px] max-w-[1300px] lg:h-[800px] text-right">
-            <Image
-              src="/whearhouse.svg"
-              alt="מחסן יבואני הממתקים"
-              fill
-              className="object-contain overflow-visible"
-
-              unoptimized
-            />
-        
-          </div>
+      {/* ── SECTION 5: Warehouse SVG ── */}
+      <section className="relative -mr-6 mb-10 lg:-mr-0">
+        <div className="relative w-full" style={{ aspectRatio: "1300/800" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/whearhouse.svg"
+            alt="מחסן יבואני הממתקים"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-contain"
+            width={1300}
+            height={800}
+          />
+        </div>
       </section>
 
       {/* ── SECTION 6: עסק עם נשמה ── */}
-      <section className="">
-        <div className="mx-auto max-w-[720px]">
-          {/* Text block */}
-          <div className="flex-1 text-center">
-            <h2 className="mb-2 text-[28px] font-[600] leading-[1.3] text-[#D41A68] lg:text-[50px]">
-              עסק עם נשמה
-            </h2>
-           
-            <p className="mb-6 text-[15px] font-regular leading-[28px] text-black lg:text-[22px] lg:leading-[32px] text-center">יבואני הממתקים היא <strong className="font-black text-[#D41A68]">חברה עם לב.</strong>אנחנו גאים בצוות שלנו הכולל עובדים יקרים בעלי מוגבלויות כחלק מתפיסה של נתינה וערבות הדדית. אצלנו הצלחה אמיתית לא נמדדת רק במספרים אלא בטוב שאנחנו עושים יחד ובחיוך שאנחנו מצליחים להעלות על פניו של כל אדם.</p>
+      <section className="relative">
+        <div className="mx-auto max-w-[720px] px-6 text-center">
 
+          <h2 className="mb-2 text-[28px] font-[600] leading-[1.3] text-[#D41A68] lg:text-[50px]">
+            עסק עם נשמה
+          </h2>
 
-            <h2 className="mb-4 text-[24px] font-[600] leading-[1.3] text-[#D41A68] lg:text-[45px]">
-              מבט קדימה
-            </h2>
-            <p className="mb-6 text-[15px] font-regular leading-[28px] text-black lg:text-[22px] lg:leading-[32px] text-center">
-              החזון שלנו הוא להמשיך לצמוח יחד איתכם. להגים את החידושים הכי חמים מהעולם
-              ולהפוך את תהליכי העבודה שלכם לקלים ופשוטים יותר. הקטלוג שבידיכם הוא לא
-              רק רשימת מוצרים אלא{" "}
-              <span className="font-bold text-[#D41A68]">הזמנה לשותפות אמת</span>{" "}
-              ולצמיחה הדדית. אנחנו כאן כדי
-              לעבוד יחד איתכם בכבוד, באמון ובשותפות שעושה שמח{" "}
-              <span className="font-[700] text-[#D41A68]">שמח בלב ולאורך שנים.</span>
-            </p>
+          <p className="mb-6 text-[15px] font-normal leading-[28px] text-black lg:text-[22px] lg:leading-[32px]">
+            יבואני הממתקים היא{" "}
+            <strong className="font-black text-[#D41A68]">חברה עם לב.</strong>{" "}
+            אנחנו גאים בצוות שלנו הכולל עובדים יקרים בעלי מוגבלויות כחלק מתפיסה של
+            נתינה וערבות הדדית. אצלנו הצלחה אמיתית לא נמדדת רק במספרים אלא בטוב
+            שאנחנו עושים יחד ובחיוך שאנחנו מצליחים להעלות על פניו של כל אדם.
+          </p>
 
-            <p className="mb-2 text-[16px] font-medium text-black lg:text-[18px]">
-              שלכם,
-            </p>
-            <p className="mb-8 text-[16px] font-bold text-black lg:text-[18px]">
-              אבשלום משה, דוד ברוכאל וצוות יבואני הממתקים
-            </p>
+          <h2 className="mb-4 text-[24px] font-[600] leading-[1.3] text-[#D41A68] lg:text-[45px]">
+            מבט קדימה
+          </h2>
 
-            {/* CTA Button */}
+          <p className="mb-6 text-[15px] font-normal leading-[28px] text-black lg:text-[22px] lg:leading-[32px]">
+            החזון שלנו הוא להמשיך לצמוח יחד איתכם. להגים את החידושים הכי חמים מהעולם
+            ולהפוך את תהליכי העבודה שלכם לקלים ופשוטים יותר. הקטלוג שבידיכם הוא לא
+            רק רשימת מוצרים אלא{" "}
+            <span className="font-bold text-[#D41A68]">הזמנה לשותפות אמת</span>{" "}
+            ולצמיחה הדדית. אנחנו כאן כדי לעבוד יחד איתכם בכבוד, באמון ובשותפות שעושה{" "}
+            <span className="font-[700] text-[#D41A68]">שמח בלב ולאורך שנים.</span>
+          </p>
+
+          <p className="mb-1 text-[16px] font-medium text-black lg:text-[18px]">שלכם,</p>
+          <p className="mb-8 text-[16px] font-bold text-black lg:text-[18px]">
+            אבשלום משה, דוד ברוכאל וצוות יבואני הממתקים
+          </p>
+
+          {/* CTA Button — sits above the cows illustration */}
+          <div className="relative z-10">
             <Link
               href="/catalog"
-              className="inline-flex items-center justify-center rounded-full bg-[#43B9B9] px-12 py-2 text-[20px] font-[500] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:opacity-90 lg:text-[32px] relative z-5"
+              className="inline-flex items-center justify-center rounded-full bg-[#43B9B9] px-12 py-3 text-[20px] font-[500] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:opacity-90 lg:text-[32px]"
             >
               לפתיחת הקטלוג
             </Link>
-          </div>          
-        </div>
-        <div className="w-full mt-[-320px]">
-            <div className="relative h-[440px]">
-              <Image
-                src="/last-cows.svg"
-                alt="mascot with gift"
-                fill
-                className="object-cover overflow-visible"
-                unoptimized
-              />
-            </div>
           </div>
+        </div>
+
+        {/* Cows illustration — ✅ explicit aspect ratio, lazy loaded */}
+        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/440" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/last-cows.svg"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+            width={1440}
+            height={440}
+          />
+        </div>
       </section>
 
-      {/* Bottom spacing */}
-      <div className="h-16 lg:h-24" />
+      <div className="h-4 lg:h-8" />
 
     </main>
   );
