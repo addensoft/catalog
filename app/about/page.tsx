@@ -225,7 +225,7 @@ export default function CustomersPage() {
         <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/0" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/last-cows.svg"
+            src="/last-cows.svg" 
             alt=""
             aria-hidden="true"
             loading="lazy"
