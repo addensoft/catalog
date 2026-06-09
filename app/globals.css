@@ -50,3 +50,33 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+@keyframes zoomRotate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  50% {
+    transform: scale(1.15) rotate(0deg);
+  }
+
+  75% {
+    transform: scale(1.08) rotate(-3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.zoom-rotate {
+  animation: zoomRotate 9s ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+/* .zoom-rotate {
+  animation: zoomRotate 3s linear infinite;
+} */

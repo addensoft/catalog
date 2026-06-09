@@ -47,17 +47,17 @@ export default function HomePage() {
   <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-0 text-center">
 
     {/* HEART BALLOON */}
-    <Image
-      src="/heart.png"
+   <Image
+      src="/Property-1Variant2-1.webp"
       alt="balloon"
-      width={220}
-      height={220}
+      width={500}
+      height={500}
       priority
-      className="mb-2 h-auto w-[110px] md:w-[170px]"
+      className="mb-2 h-auto w-[110px] md:w-[400px] zoom-rotate ml-[-100px]" 
     />
 
     {/* TITLE */}
-    <h2 className="mb-0 text-[42px] font-black leading-none text-[#B0155A] md:text-[75px]">
+    <h2 className="mb-0 text-[42px] font-black leading-none text-[#B0155A] md:text-[65px]">
       קטלוג מוצרים
     </h2>
 
@@ -68,12 +68,12 @@ export default function HomePage() {
         from-[#FF2B8A]
         to-[#B10055]
         bg-clip-text
-        text-[95px]
+        text-[65px]
         font-black
         leading-none
         text-transparent
         drop-shadow-[0_6px_0_rgba(140,0,70,0.35)]
-        md:text-[180px]
+        md:text-[120px]
       "
     >
       2026
