@@ -647,11 +647,11 @@ export default function CatalogPage() {
 
                   {/* IMAGE SIDE */}
                   <div className="order-1 md:order-2 min-w-0 relative bg-white p-4">
-                    <div className="mb-4 flex justify-end">
+                    <div className="mb-4 flex justify-end relative z-3">
                       <Image src={selectedProduct?.brand_image || "/logo.png"} alt="brand"
                         width={300} height={120} className="h-auto max-h-[90px] w-auto object-contain" />
                     </div>
-                    <div className="relative mx-auto h-[260px] w-full max-w-[340px] overflow-hidden md:h-[380px]">
+                    <div className="relative mx-auto mt-[-130px] z-1 h-[260px] w-full max-w-[340px] overflow-hidden md:h-[380px]">
                       {galleryImages.map((img: string, index: number) => (
                         <Image key={index} src={img} alt={`gallery-${index}`} fill unoptimized
                           sizes="340px"
