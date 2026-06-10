@@ -598,7 +598,7 @@ export default function CatalogPage() {
               </div>
 
               {/* POPUP BODY */}
-              <div className="overflow-y-auto p-3 md:p-5">
+              <div className="overflow-y-auto p-3 md:p-5 bg-white">
                 <div className="grid grid-cols-1 gap-4 mb-9 md:grid-cols-[60%_38%]">
 
                   {/* CONTENT SIDE */}
