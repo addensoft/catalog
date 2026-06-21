@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { writeFile, readFile } from "fs/promises";
+import { join } from "path";
 
 const WP_URL = process.env.WC_URL;
 const authHeader = {
@@ -8,8 +10,11 @@ const authHeader = {
 };
 
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-let cachedData: any | null = null;
-let cacheTimestamp = 0;
+const CACHE_FILE = join(process.cwd(), ".catalog-cache.json");
+
+// In-memory cache (fast for warm requests)
+let memCache: any | null = null;
+let memCacheTime = 0;
 
 const sizeUnitMap: Record<string, string> = {
   gram: "גרם",
@@ -17,6 +22,7 @@ const sizeUnitMap: Record<string, string> = {
   kg: 'ק"ג',
 };
 
+// ── Fetch all product pages in parallel ───────────────────────────────────────
 async function fetchAllProducts(): Promise<any[]> {
   const firstRes = await fetch(
     `${WP_URL}/wp-json/wc/v3/products?per_page=100&page=1&_fields=id,name,slug,price,date_created,images,brands,categories,attributes,meta_data,sku`,
@@ -39,31 +45,23 @@ async function fetchAllProducts(): Promise<any[]> {
   return [firstData, ...rest].flat();
 }
 
-async function fetchBrandImages(allProducts: any[]): Promise<Record<number, string>> {
-  const ids = [
-    ...new Set(allProducts.map((p: any) => p.brands?.[0]?.id).filter(Boolean)),
-  ] as number[];
-
-  const map: Record<number, string> = {};
-  await Promise.all(
-    ids.map(async (id) => {
-      try {
-        const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 5000);
-        const res = await fetch(`${WP_URL}/wp-json/wc/v3/products/brands/${id}`, {
-          headers: authHeader,
-          signal: ctrl.signal,
-          next: { revalidate: 3600 },
-        });
-        clearTimeout(t);
-        const d = await res.json();
-        map[id] = d.image?.src || "/brands/default.png";
-      } catch {
-        map[id] = "/brands/default.png";
-      }
-    })
-  );
-  return map;
+// ── Fetch ALL brand images in ONE request (was N requests before) ─────────────
+async function fetchBrandImageMap(): Promise<Record<number, string>> {
+  try {
+    const res = await fetch(
+      `${WP_URL}/wp-json/wc/v3/products/brands?per_page=100&_fields=id,image`,
+      { headers: authHeader, next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return {};
+    const brands: any[] = await res.json();
+    const map: Record<number, string> = {};
+    for (const b of brands) {
+      map[b.id] = b.image?.src || "/brands/default.png";
+    }
+    return map;
+  } catch {
+    return {};
+  }
 }
 
 function mapProduct(item: any, brandImageMap: Record<number, string>) {
@@ -112,44 +110,84 @@ function mapProduct(item: any, brandImageMap: Record<number, string>) {
   };
 }
 
-export async function GET() {
+// ── Read file cache (survives server restarts) ────────────────────────────────
+async function readFileCache(): Promise<any | null> {
   try {
-    const now = Date.now();
+    const raw = await readFile(CACHE_FILE, "utf-8");
+    const { timestamp, data } = JSON.parse(raw);
+    if (Date.now() - timestamp < CACHE_TTL_MS) return data;
+  } catch {}
+  return null;
+}
 
-    if (cachedData && now - cacheTimestamp < CACHE_TTL_MS) {
-      return NextResponse.json(cachedData, {
-        headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
-      });
-    }
+async function writeFileCache(data: any) {
+  try {
+    await writeFile(CACHE_FILE, JSON.stringify({ timestamp: Date.now(), data }));
+  } catch {}
+}
 
-    // Fetch products + categories + filters all in parallel
-    const [allProducts, categoriesRes, kashrutRes, dietaryRes, settingsRes] = await Promise.all([
+// ── Fetch fresh data from WooCommerce ─────────────────────────────────────────
+async function fetchFresh() {
+  const [allProducts, brandImageMap, categoriesRes, kashrutRes, dietaryRes, settingsRes] =
+    await Promise.all([
       fetchAllProducts(),
+      fetchBrandImageMap(),
       fetch(`${WP_URL}/wp-json/wc/v3/products/categories?per_page=100&_fields=id,name,slug,count`, { headers: authHeader, next: { revalidate: 3600 } }).then((r) => r.json()),
       fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/1/terms?_fields=id,name,slug`, { headers: authHeader, next: { revalidate: 3600 } }).then((r) => r.json()),
       fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/2/terms?_fields=id,name,slug`, { headers: authHeader, next: { revalidate: 3600 } }).then((r) => r.json()),
       fetch(`${WP_URL}/wp-json/custom/v1/site-settings`, { next: { revalidate: 3600 } }).then((r) => r.ok ? r.json() : null).catch(() => null),
     ]);
 
-    const brandImageMap = await fetchBrandImages(allProducts);
-    const products = allProducts.map((item) => mapProduct(item, brandImageMap));
+  const products = allProducts.map((item) => mapProduct(item, brandImageMap));
 
-    const categories = categoriesRes
-      .filter((c: any) => c.name !== "Uncategorized" && c.slug !== "uncategorized" && c.name !== "Default Category")
-      .map((c: any) => ({ id: c.id, title: c.name, slug: c.slug, count: c.count }));
+  const categories = categoriesRes
+    .filter((c: any) => c.name !== "Uncategorized" && c.slug !== "uncategorized" && c.name !== "Default Category")
+    .map((c: any) => ({ id: c.id, title: c.name, slug: c.slug, count: c.count }));
 
-    // Derive brands from products — no extra WC request needed
-    const brandsMap = new Map<string, { id: number; name: string; slug: string }>();
-    for (const p of allProducts) {
-      const b = p.brands?.[0];
-      if (b && !brandsMap.has(b.name)) brandsMap.set(b.name, { id: b.id, name: b.name, slug: b.slug });
+  const brandsMap = new Map<string, { id: number; name: string; slug: string }>();
+  for (const p of allProducts) {
+    const b = p.brands?.[0];
+    if (b && !brandsMap.has(b.name)) brandsMap.set(b.name, { id: b.id, name: b.name, slug: b.slug });
+  }
+
+  return {
+    products,
+    categories,
+    brands: [...brandsMap.values()],
+    kashrut: kashrutRes,
+    dietary: dietaryRes,
+    settings: settingsRes,
+  };
+}
+
+// ── Route handler ─────────────────────────────────────────────────────────────
+export async function GET() {
+  try {
+    const now = Date.now();
+
+    // 1. In-memory cache hit — instant
+    if (memCache && now - memCacheTime < CACHE_TTL_MS) {
+      return NextResponse.json(memCache, {
+        headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
+      });
     }
-    const brands = [...brandsMap.values()];
 
-    const data = { products, categories, brands, kashrut: kashrutRes, dietary: dietaryRes, settings: settingsRes };
+    // 2. File cache hit — fast (survives server restarts)
+    const fileData = await readFileCache();
+    if (fileData) {
+      memCache = fileData;
+      memCacheTime = now;
+      return NextResponse.json(fileData, {
+        headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
+      });
+    }
 
-    cachedData = data;
-    cacheTimestamp = now;
+    // 3. Cache miss — fetch from WooCommerce, save to both caches
+    const data = await fetchFresh();
+
+    memCache = data;
+    memCacheTime = now;
+    writeFileCache(data); // async, don't await
 
     return NextResponse.json(data, {
       headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
@@ -157,7 +195,9 @@ export async function GET() {
 
   } catch (error) {
     console.error("Catalog API error:", error);
-    if (cachedData) return NextResponse.json(cachedData);
+    if (memCache) return NextResponse.json(memCache);
+    const fileData = await readFileCache().catch(() => null);
+    if (fileData) return NextResponse.json(fileData);
     return NextResponse.json({ error: "Failed to fetch catalog" }, { status: 500 });
   }
 }
