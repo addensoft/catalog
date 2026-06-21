@@ -121,7 +121,7 @@ function mapProduct(item: any, brandImageMap: Record<number, string>) {
     price:        Number(item.price || 0),
     date_created: item.date_created,
     image:        item.images?.[0]?.src || "/placeholder.png",
-    gallery_images: item.images?.map((img: any) => img.src) || [],
+    gallery_images: item.images?.slice(1).map((img: any) => img.src) || [],
     brand_image:  brandThumbnail,
     category:     item.categories?.map((cat: any) => cat.name) || [],
     brand:        brand?.name || "",

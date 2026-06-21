@@ -81,31 +81,23 @@ export default function CatalogPage() {
     return () => clearInterval(interval);
   }, [galleryImages.length]);
 
-  // ── Data fetching — products first, then meta in parallel ───────────────────
+  // ── Data fetching — single request for everything ────────────────────────────
   useEffect(() => {
-    // Fetch products immediately so the grid renders ASAP
-    fetch("/api/products")
+    fetch("/api/catalog")
       .then((r) => r.json())
-      .then((data) => { setProducts(data); setProductsLoading(false); })
-      .catch(() => setProductsLoading(false));
-
-    // Fetch everything else in parallel — non-blocking for the product grid
-    Promise.all([
-      fetch("/api/categories").then((r) => r.json()),
-      fetch("/api/brands").then((r) => r.json()),
-      fetch("/api/kashrut").then((r) => r.json()),
-      fetch("/api/dietary").then((r) => r.json()),
-      fetch("/api/settings").then((r) => r.json()),
-    ])
-      .then(([categoriesData, brandsData, kashrutData, dietaryData, settingsData]) => {
-        setCategories(categoriesData);
-        setBrands(brandsData);
-        setKashrut(kashrutData);
-        setDietary(dietaryData);
-        setSettings(settingsData);
+      .then(({ products, categories, brands, kashrut, dietary, settings }) => {
+        setProducts(products ?? []);
+        setCategories(categories ?? []);
+        setBrands(brands ?? []);
+        setKashrut(kashrut ?? []);
+        setDietary(dietary ?? []);
+        setSettings(settings ?? null);
       })
       .catch(console.error)
-      .finally(() => setMetaLoading(false));
+      .finally(() => {
+        setProductsLoading(false);
+        setMetaLoading(false);
+      });
   }, []);
 
   // ── Reset visible count when filters change ──────────────────────────────────
@@ -307,7 +299,7 @@ export default function CatalogPage() {
                     </div>
 
                     {/* KASHRUT FILTER */}
-                    <div className="mb-3 flex items-center gap-4">
+                    <div className="mb-5 flex items-center gap-4">
                       <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">סינון לפי כשרות</h3>
                       <div className="flex flex-wrap gap-3">
                         {kashrut.map((item) => (
@@ -323,7 +315,7 @@ export default function CatalogPage() {
                     </div>
 
                     {/* BRANDS FILTER */}
-                    <div className="mb-3 flex items-center gap-4">
+                    <div className="mb-5 flex items-center gap-4">
                       <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">סינון לפי מותג</h3>
                       <div className="flex flex-wrap gap-3">
                         {brands.map((item) => (
@@ -339,7 +331,7 @@ export default function CatalogPage() {
                     </div>
 
                     {/* DIETARY FILTER */}
-                    <div className="mb-3 flex items-center gap-4">
+                    <div className="mb-5 flex items-center gap-4">
                       <h3 className="min-w-[180px] text-right text-[25px] font-medium text-[#D41A68]">סינון לפי העדפה תזונתית</h3>
                       <div className="flex flex-wrap gap-3">
                         {dietary.map((item) => (
@@ -510,7 +502,7 @@ export default function CatalogPage() {
             ? [...Array(9)].map((_, i) => (
                 <div key={i} className="bg-white h-[520px] animate-pulse" />
               ))
-            : displayedProducts.map((product) => (
+            : displayedProducts.map((product, index) => (
                 <div
                   key={product.id}
                   onClick={() => setSelectedProduct(product)}
@@ -528,8 +520,8 @@ export default function CatalogPage() {
                         {product.category?.find((cat) => cat !== "כל הממתקים") || product.category?.[0]}
                       </div>
                       <div className="ml-[-14px] relative">
-                        <Image src={product.brand_image} alt={product.title}
-                          width={440} height={140} priority unoptimized
+                        <Image src={product.brand_image} alt={product.brand}
+                          width={220} height={70}
                           className="h-[50px] w-auto object-contain" />
                       </div>
                     </div>
@@ -537,7 +529,8 @@ export default function CatalogPage() {
                     {/* IMAGE */}
                     <div className="relative mx-auto mb-2 h-[250px] w-full max-w-[300px]">
                       <Image src={product.image} alt={product.title} fill
-                        sizes="300px"  // ✅ helps Next.js pick the right size
+                        sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 300px"
+                        priority={index < 6}
                         className="object-contain" />
                     </div>
 
@@ -616,18 +609,17 @@ export default function CatalogPage() {
 
                     {/* SKU + BARCODE */}
                     <div className="border-b-[2px] border-[#46BAB9] py-2">
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-4">
                         <div className="text-right">
                           <p className="text-[20px] md:text-[26px] font-regular text-[#D41A68]">מק״ט</p>
                           <p className="mt-1 break-words text-[22px] leading-[24px] md:text-[26px] md:leading-[28px] font-medium">
                             {selectedProduct?.sku}
                           </p>
                         </div>
-                        <div className="shrink-0 pt-2">
-                          {/* ✅ Barcode only renders when popup is open, loaded lazily */}
-                          <Suspense fallback={<div className="h-[80px] w-[120px] bg-gray-100 animate-pulse" />}>
+                        <div className="shrink-0">
+                          <Suspense fallback={<div className="h-[60px] w-[100px] bg-gray-100 animate-pulse" />}>
                             <Barcode value={selectedProduct.sku} format="CODE128"
-                              width={1.7} height={80} fontSize={10} margin={0} />
+                              width={1.2} height={60} fontSize={9} margin={0} />
                           </Suspense>
                         </div>
                       </div>
@@ -652,13 +644,19 @@ export default function CatalogPage() {
                         width={300} height={120} className="h-auto max-h-[90px] w-auto object-contain" />
                     </div>
                     <div className="relative mx-auto mt-[-130px] z-1 h-[260px] w-full max-w-[340px] overflow-hidden md:h-[380px]">
-                      {galleryImages.map((img: string, index: number) => (
-                        <Image key={index} src={img} alt={`gallery-${index}`} fill unoptimized
-                          sizes="340px"
-                          className={`absolute inset-0 object-contain transition-all duration-700 ${
-                            activeImage === index ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                          }`} />
-                      ))}
+                      {galleryImages.map((img: string, index: number) => {
+                        const isActive = activeImage === index;
+                        const isNext = index === (activeImage + 1) % galleryImages.length;
+                        if (!isActive && !isNext) return null;
+                        return (
+                          <Image key={img} src={img} alt={`gallery-${index}`} fill
+                            sizes="(max-width: 768px) 260px, 340px"
+                            priority={isActive}
+                            className={`absolute inset-0 object-contain transition-all duration-700 ${
+                              isActive ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                            }`} />
+                        );
+                      })}
                     </div>
                     <div className="mt-5 flex justify-center gap-4">
                       {galleryImages.map((_: any, index: number) => (
