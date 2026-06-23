@@ -70,7 +70,7 @@ export default function AboutPage() {
       <section
         className="relative z-[1] mt-[-160px] px-6 pb-10 pt-6 text-center lg:mt-[-200px] lg:pb-[300px] lg:pt-[126px] [background-position-y:40px]"
         style={{
-          backgroundImage: "url('https://candyimporter.co.il/wp-content/uploads/2026/02/Vector-3-1-scaled.png')",
+          backgroundImage: "url('/white-corve-setone.png')",
           backgroundRepeat: "no-repeat",
           backgroundSize: "90%",
           backgroundPosition: "center 40px",
