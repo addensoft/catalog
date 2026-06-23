@@ -68,17 +68,17 @@ export default function AboutPage() {
 
       {/* ── SECTION 1: Hero / Intro ── */}
       <section
-        className="relative z-[1] mt-[-160px] px-6 pb-10 pt-6 text-center lg:mt-[-200px] lg:pb-16 lg:pt-[95px]"
+        className="relative z-[1] mt-[-160px] px-6 pb-10 pt-6 text-center lg:mt-[-200px] lg:pb-[300px] lg:pt-[126px] [background-position-y:40px]"
         style={{
-          backgroundImage: "url('/white-corve.svg')",
+          backgroundImage: "url('https://candyimporter.co.il/wp-content/uploads/2026/02/Vector-3-1-scaled.png')",
           backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
-          backgroundPosition: "center top",
+          backgroundSize: "90%",
+          backgroundPosition: "center 40px",
         }}
       >
-        <div className="mx-auto max-w-[725px]">
+        <div className="mx-auto max-w-[1024px]">
 
-          <div className="relative mx-auto mb-6 h-[60px] w-full max-w-[500px] lg:h-[90px]">
+          <div className="relative mx-auto mb-6 h-[60px] w-full ">
             <Image
               src="/heading.webp"
               alt="לקוחות ושותפים יקרים"
@@ -115,7 +115,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── SECTION 2: Quality text ── */}
-      <section className="mx-auto max-w-[725px] px-6 py-10 text-center lg:py-16">
+      <section className="mx-auto max-w-[725px] px-6 py-10 text-center lg:py-16 lg:mt-[-290px] relative z-2">
         <h2 className="mb-1 text-[28px] font-bold leading-[1.3] text-[#D41367] lg:text-[50px]">
           איכות, בחירה וערר
         </h2>
@@ -133,8 +133,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── SECTION 3: Truck SVG ── */}
-      <section className="relative -mx-6 mb-6 mt-[-280px] lg:-mx-0 lg:mt-[-300px]">
-        <div className="relative w-full" style={{ aspectRatio: "1200/700" }}>
+      <section className="relative -mx-6 mb-6 mt-[-280px] lg:-mx-0 lg:mt-[-600px] relative z-3">
+        <div className="relative w-full" style={{ aspectRatio: "1200/860" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/truck.svg"
@@ -168,16 +168,16 @@ export default function AboutPage() {
 
       {/* ── SECTION 5: Warehouse SVG ── */}
       <section className="relative -mr-6 mb-10 lg:-mr-0">
-        <div className="relative" style={{ aspectRatio: "800/600" }}>
+        <div className="relative" style={{ aspectRatio: "800/375" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/whearhouse.svg"
             alt="מחסן יבואני הממתקים"
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-contain"
-            width={1100}
-            height={600}
+            className="h-full w-[80%] object-contain"
+            width={800}
+            height={300}
           />
         </div>
       </section>
@@ -226,7 +226,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/440" }}>
+        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/560" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/last-cows.svg"
