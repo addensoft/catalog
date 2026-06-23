@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache";
+
 const WP_URL = process.env.WC_URL;
 const authHeader = {
   Authorization:
@@ -11,10 +13,12 @@ const sizeUnitMap: Record<string, string> = {
   kg: 'ק"ג',
 };
 
+const CACHE_OPTS = { next: { revalidate: 3600 } } as const;
+
 async function fetchAllProducts(): Promise<any[]> {
   const firstRes = await fetch(
     `${WP_URL}/wp-json/wc/v3/products?per_page=100&page=1&_fields=id,name,slug,price,date_created,images,brands,categories,attributes,meta_data,sku`,
-    { headers: authHeader }
+    { headers: authHeader, ...CACHE_OPTS }
   );
   if (!firstRes.ok) throw new Error(`WC products failed: ${firstRes.status}`);
 
@@ -26,7 +30,7 @@ async function fetchAllProducts(): Promise<any[]> {
     Array.from({ length: totalPages - 1 }, (_, i) =>
       fetch(
         `${WP_URL}/wp-json/wc/v3/products?per_page=100&page=${i + 2}&_fields=id,name,slug,price,date_created,images,brands,categories,attributes,meta_data,sku`,
-        { headers: authHeader }
+        { headers: authHeader, ...CACHE_OPTS }
       ).then((r) => r.json())
     )
   );
@@ -37,7 +41,7 @@ async function fetchBrandImageMap(): Promise<Record<number, string>> {
   try {
     const res = await fetch(
       `${WP_URL}/wp-json/wc/v3/products/brands?per_page=100&_fields=id,image`,
-      { headers: authHeader }
+      { headers: authHeader, ...CACHE_OPTS }
     );
     if (!res.ok) return {};
     const brands: any[] = await res.json();
@@ -92,15 +96,15 @@ function mapProduct(item: any, brandImageMap: Record<number, string>) {
   };
 }
 
-export async function getCatalogData() {
+async function _getCatalogData() {
   const [allProducts, brandImageMap, categoriesRes, kashrutRes, dietaryRes, settingsRes] =
     await Promise.all([
       fetchAllProducts(),
       fetchBrandImageMap(),
-      fetch(`${WP_URL}/wp-json/wc/v3/products/categories?per_page=100&_fields=id,name,slug,count`, { headers: authHeader }).then((r) => r.json()),
-      fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/1/terms?_fields=id,name,slug`, { headers: authHeader }).then((r) => r.json()),
-      fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/2/terms?_fields=id,name,slug`, { headers: authHeader }).then((r) => r.json()),
-      fetch(`${WP_URL}/wp-json/custom/v1/site-settings`).then((r) => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${WP_URL}/wp-json/wc/v3/products/categories?per_page=100&_fields=id,name,slug,count`, { headers: authHeader, ...CACHE_OPTS }).then((r) => r.json()),
+      fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/1/terms?_fields=id,name,slug`, { headers: authHeader, ...CACHE_OPTS }).then((r) => r.json()),
+      fetch(`${WP_URL}/wp-json/wc/v3/products/attributes/2/terms?_fields=id,name,slug`, { headers: authHeader, ...CACHE_OPTS }).then((r) => r.json()),
+      fetch(`${WP_URL}/wp-json/custom/v1/site-settings`, CACHE_OPTS).then((r) => r.ok ? r.json() : null).catch(() => null),
     ]);
 
   const products = allProducts.map((item) => mapProduct(item, brandImageMap));
@@ -124,3 +128,11 @@ export async function getCatalogData() {
     settings: settingsRes,
   };
 }
+
+// Cache the entire catalog in Next.js data cache — revalidates every hour.
+// First request fetches from WooCommerce; all subsequent requests within 1h are instant.
+export const getCatalogData = unstable_cache(
+  _getCatalogData,
+  ["catalog-data"],
+  { revalidate: 3600, tags: ["catalog"] }
+);

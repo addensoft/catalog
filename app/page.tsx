@@ -1,12 +1,19 @@
-"use client";
-import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "יבואני הממתקים | קטלוג מוצרים 2026",
+};
 
 
 export default function HomePage() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#F6D8C7]">
+
+  {/* Preload BG — hidden, tells browser to fetch it at high priority */}
+  <Image src="/homebg.png" alt="" aria-hidden="true" fill priority
+    sizes="100vw" className="pointer-events-none select-none opacity-0 -z-50" />
 
   {/* BG STARS */}
   <div

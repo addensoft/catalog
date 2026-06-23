@@ -19,16 +19,6 @@ export default function AboutPage() {
       }}
     >
 
-      {/* Preload the heavy background via a hidden priority image */}
-      <Image
-        src="/mian-about-bg.webp"
-        alt=""
-        aria-hidden="true"
-        fill
-        priority
-        sizes="100vw"
-        className="pointer-events-none fixed inset-0 -z-10 object-cover object-top"
-      />
 
       {/* ── HEADER ── */}
       <header
