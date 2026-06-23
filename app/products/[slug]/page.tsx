@@ -1,6 +1,10 @@
 import { products } from "@/data/products";
 import Image from "next/image";
 
+export function generateStaticParams() {
+  return products.map((p) => ({ slug: p.slug }));
+}
+
 export default async function ProductPage({
   params,
 }: {

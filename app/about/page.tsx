@@ -1,8 +1,12 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export default function CustomersPage() {
+export const metadata: Metadata = {
+  title: "אודות | יבואני הממתקים",
+};
+
+export default function AboutPage() {
   return (
     <main
       dir="rtl"
@@ -10,9 +14,21 @@ export default function CustomersPage() {
       style={{
         backgroundImage: "url('/mian-about-bg.webp')",
         backgroundSize: "cover",
-        backgroundAttachment: "fixed", // smoother on desktop
+        backgroundPosition: "center top",
+        // ❌ removed backgroundAttachment: "fixed" — forces full repaint on every scroll pixel
       }}
     >
+
+      {/* Preload the heavy background via a hidden priority image */}
+      <Image
+        src="/mian-about-bg.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        priority
+        sizes="100vw"
+        className="pointer-events-none fixed inset-0 -z-10 object-cover object-top"
+      />
 
       {/* ── HEADER ── */}
       <header
@@ -24,7 +40,6 @@ export default function CustomersPage() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Logo */}
         <div className="flex items-center">
           <Link href="/">
             <Image
@@ -32,7 +47,6 @@ export default function CustomersPage() {
               alt="יבואני הממתקים"
               width={340}
               height={100}
-              // ✅ fixed position logo — give it explicit size, no fill
               className="absolute top-0 h-[108px] w-auto object-contain lg:h-[170px]"
               priority
               sizes="(max-width: 1024px) 200px, 340px"
@@ -40,7 +54,6 @@ export default function CustomersPage() {
           </Link>
         </div>
 
-        {/* Back button */}
         <Link
           href="/catalog"
           className="flex items-center gap-3 rounded-full bg-white px-6 py-2 text-[16px] font-[600] text-[#43B9B9] shadow-md transition-all duration-200 hover:bg-[#D41A68] hover:text-white lg:text-[20px]"
@@ -65,7 +78,6 @@ export default function CustomersPage() {
       >
         <div className="mx-auto max-w-[725px]">
 
-          {/* Heading image — ✅ use <Image> with explicit width/height, not background */}
           <div className="relative mx-auto mb-6 h-[60px] w-full max-w-[500px] lg:h-[90px]">
             <Image
               src="/heading.webp"
@@ -121,14 +133,8 @@ export default function CustomersPage() {
       </section>
 
       {/* ── SECTION 3: Truck SVG ── */}
-      {/* 
-        ✅ SVG illustrations: use <img> tag (not Next/Image) for SVGs that are 
-        already vector — Next.js can't optimize SVGs further and unoptimized 
-        defeats the point. But DO give explicit width/height to avoid layout shift.
-        ✅ Use aspect-ratio instead of hardcoded heights so it's truly responsive.
-      */}
       <section className="relative -mx-6 mb-6 mt-[-280px] lg:-mx-0 lg:mt-[-300px]">
-        <div className="relative w-full" style={{ aspectRatio: "1200/00" }}>
+        <div className="relative w-full" style={{ aspectRatio: "1200/700" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/truck.svg"
@@ -162,7 +168,7 @@ export default function CustomersPage() {
 
       {/* ── SECTION 5: Warehouse SVG ── */}
       <section className="relative -mr-6 mb-10 lg:-mr-0">
-        <div className="relative " style={{ aspectRatio: "800/0" }}>
+        <div className="relative" style={{ aspectRatio: "800/600" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/whearhouse.svg"
@@ -210,7 +216,6 @@ export default function CustomersPage() {
             אבשלום משה, דוד ברוכאל וצוות יבואני הממתקים
           </p>
 
-          {/* CTA Button — sits above the cows illustration */}
           <div className="relative z-10">
             <Link
               href="/catalog"
@@ -221,11 +226,10 @@ export default function CustomersPage() {
           </div>
         </div>
 
-        {/* Cows illustration — ✅ explicit aspect ratio, lazy loaded */}
-        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/0" }}>
+        <div className="relative mt-[-180px] w-full lg:mt-[-320px]" style={{ aspectRatio: "1440/440" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/last-cows.svg" 
+            src="/last-cows.svg"
             alt=""
             aria-hidden="true"
             loading="lazy"
